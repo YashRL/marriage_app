@@ -179,7 +179,7 @@ def search_page():
         st.write(f"Current Address: {document['Current Address']}")
         st.write(f"Contact No.: {document['Contact No.']}")
         st.write(f"Mail: {document['Mail']}")
-        st.write(f"PostrerName: {document['PostrerName']}")
+        # st.write(f"PostrerName: {document['PostrerName']}")
 
 
 
