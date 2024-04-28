@@ -4,7 +4,7 @@ import datetime
 import uuid
 
 # Connect to MongoDB and create a new database and collection
-client = MongoClient("mongodb+srv://yashrawal987:Uo9WhVC25AQkoruW@cluster0.aoauzkm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+client = MongoClient(MONGO_URL)
 db = client['new_database']  # New database
 collection = db['new_collection']  # New collection
 
