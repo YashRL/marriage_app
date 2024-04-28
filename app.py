@@ -96,8 +96,8 @@ def post_page():
     # Mail
     mail = st.text_input("Mail (मेल)")
 
-    # Postrer's Name
-    postrers_name = st.text_input("Postrer's Name (प्रेषक का नाम)")
+    # PostrerName
+    postrers_name = st.text_input("PostrerName (प्रेषक का नाम)")
 
     # Additional Comments
     additional_comments = st.text_area("Additional Comments (अतिरिक्त टिप्पणियां)")
@@ -133,7 +133,7 @@ def post_page():
                 "Current Address": current_address,
                 "Contact No.": contact_no,
                 "Mail": mail,
-                "Postrer's Name": postrers_name,
+                "PostrerName": postrers_name,
                 "Additional Comments": additional_comments
             }
 
@@ -179,7 +179,7 @@ def search_page():
         st.write(f"Current Address: {document['Current Address']}")
         st.write(f"Contact No.: {document['Contact No.']}")
         st.write(f"Mail: {document['Mail']}")
-        st.write(f"Postrer's Name: {document['Postrer's Name']}")
+        st.write(f"PostrerName: {document['PostrerName']}")
 
 
 
