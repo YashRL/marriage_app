@@ -178,7 +178,8 @@ def search_page():
         st.write(f"Current Address: {document['Current Address']}")
         st.write(f"Contact No.: {document['Contact No.']}")
         st.write(f"Mail: {document['Mail']}")
-        st.write(f"Postrer's Name: {document['Postrer\'s Name'].replace('\\', '')}")
+        st.write(f"Postrer's Name: {document['Postrer\'s Name'].replace('\\\\', '')}")
+
 
 
         st.write(f"Additional Comments: {document['Additional Comments']}")
