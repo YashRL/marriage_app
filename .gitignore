@@ -1,2 +1,5 @@
-** .env
-** example.env
+# Environment variables
+.env
+.env.*
+!.env.example
+!.env.sample
