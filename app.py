@@ -5,7 +5,8 @@ from pathlib import Path
 import psycopg
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 load_dotenv()
@@ -15,6 +16,7 @@ COOKIE_NAME = "nb_user"
 
 app = FastAPI(title="Nagar Brahmin Matrimony")
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
 
 def db():
@@ -156,8 +158,35 @@ def on_startup():
 
 
 @app.get("/", response_class=HTMLResponse)
-def index(request: Request):
-    return templates.TemplateResponse(request, "index.html")
+def landing_page(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={"request": request, "user": current_user(request)},
+    )
+
+
+@app.get("/auth", response_class=HTMLResponse)
+def auth_page(request: Request):
+    if current_user(request):
+        return RedirectResponse("/home", status_code=302)
+    return templates.TemplateResponse(
+        request=request,
+        name="auth.html",
+        context={"request": request},
+    )
+
+
+@app.get("/home", response_class=HTMLResponse)
+def home_page(request: Request):
+    user = current_user(request)
+    if not user:
+        return RedirectResponse("/auth", status_code=302)
+    return templates.TemplateResponse(
+        request=request,
+        name="home.html",
+        context={"request": request, "user": user},
+    )
 
 
 @app.get("/assets/1.jpg")

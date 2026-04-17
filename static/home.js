@@ -1,0 +1,125 @@
+const logoutBtn = document.getElementById("logoutBtn");
+const saveProfileBtn = document.getElementById("saveProfileBtn");
+const profileMessage = document.getElementById("profileMessage");
+const profilesNode = document.getElementById("profiles");
+const profilesCount = document.getElementById("profilesCount");
+const filterGender = document.getElementById("filterGender");
+const filterCity = document.getElementById("filterCity");
+const loadProfilesBtn = document.getElementById("loadProfilesBtn");
+
+async function api(url, options = {}) {
+  const response = await fetch(url, {
+    credentials: "same-origin",
+    headers: {
+      Accept: "application/json",
+      ...(options.body instanceof FormData ? {} : { "Content-Type": "application/json" }),
+    },
+    ...options,
+  });
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.detail || data.message || "Request failed.");
+  }
+  return data;
+}
+
+function ageFromDob(dob) {
+  if (!dob) {
+    return "-";
+  }
+  const diff = Date.now() - new Date(dob).getTime();
+  return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+}
+
+function showProfileMessage(type, text) {
+  profileMessage.className = `status-message ${type}`;
+  profileMessage.textContent = text;
+}
+
+function renderProfiles(items) {
+  profilesNode.innerHTML = "";
+  profilesCount.textContent = `${items.length} profile${items.length === 1 ? "" : "s"}`;
+
+  if (!items.length) {
+    profilesNode.innerHTML = '<div class="profile-card"><div class="meta">No profiles found.</div></div>';
+    return;
+  }
+
+  for (const item of items) {
+    const card = document.createElement("article");
+    card.className = "profile-card";
+    const imageMarkup = item.photo_b64
+      ? `<img class="avatar" src="data:image/jpeg;base64,${item.photo_b64}" alt="${item.full_name}">`
+      : '<div class="avatar"></div>';
+
+    card.innerHTML = `
+      <div class="profile-head">
+        ${imageMarkup}
+        <div>
+          <div class="profile-title">${item.full_name}</div>
+          <div class="meta">${item.gender || "-"} | ${ageFromDob(item.dob)} yrs | ${item.city || "-"}</div>
+        </div>
+      </div>
+      <div class="profile-copy">
+        <strong>Gotra:</strong> ${item.gotra || "-"}<br>
+        <strong>Manglik:</strong> ${item.manglik || "-"}<br>
+        <strong>Education:</strong> ${item.education || "-"}<br>
+        <strong>Occupation:</strong> ${item.occupation || "-"}<br>
+        <strong>Contact:</strong> ${item.contact_phone || "-"} / ${item.contact_email || "-"}<br>
+        <strong>About:</strong> ${item.about || "-"}
+      </div>
+    `;
+    profilesNode.appendChild(card);
+  }
+}
+
+async function loadProfiles() {
+  const params = new URLSearchParams({
+    gender: filterGender.value,
+    city: filterCity.value.trim(),
+  });
+  const data = await api(`/api/profiles?${params.toString()}`, { method: "GET" });
+  renderProfiles(data.profiles);
+}
+
+logoutBtn.addEventListener("click", async () => {
+  await api("/api/signout", { method: "POST" });
+  window.location.href = "/auth";
+});
+
+saveProfileBtn.addEventListener("click", async () => {
+  const form = new FormData();
+  form.append("full_name", document.getElementById("fullName").value.trim());
+  form.append("gender", document.getElementById("gender").value);
+  form.append("dob", document.getElementById("dob").value);
+  form.append("gotra", document.getElementById("gotra").value.trim());
+  form.append("manglik", document.getElementById("manglik").value);
+  form.append("education", document.getElementById("education").value.trim());
+  form.append("occupation", document.getElementById("occupation").value.trim());
+  form.append("city", document.getElementById("city").value.trim());
+  form.append("about", document.getElementById("about").value.trim());
+  form.append("contact_phone", document.getElementById("contactPhone").value.trim());
+  form.append("contact_email", document.getElementById("contactEmail").value.trim());
+
+  const file = document.getElementById("photo").files[0];
+  if (file) {
+    form.append("photo", file);
+  }
+
+  try {
+    const data = await api("/api/profiles", { method: "POST", body: form });
+    showProfileMessage("success", data.message);
+    await loadProfiles();
+  } catch (error) {
+    showProfileMessage("error", error.message);
+  }
+});
+
+loadProfilesBtn.addEventListener("click", loadProfiles);
+filterGender.addEventListener("change", loadProfiles);
+filterCity.addEventListener("input", loadProfiles);
+
+loadProfiles().catch(() => {
+  renderProfiles([]);
+});

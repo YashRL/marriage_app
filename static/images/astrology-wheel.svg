@@ -1,0 +1,25 @@
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="800" rx="48" fill="url(#bg)"/>
+  <circle cx="400" cy="400" r="250" stroke="#A75B3C" stroke-width="8" opacity="0.32"/>
+  <circle cx="400" cy="400" r="198" stroke="#A75B3C" stroke-width="3" opacity="0.35"/>
+  <circle cx="400" cy="400" r="120" stroke="#A75B3C" stroke-width="2" opacity="0.25"/>
+  <path d="M400 150V650M150 400H650M223 223L577 577M577 223L223 577" stroke="#9A4D2F" stroke-width="3" opacity="0.3"/>
+  <circle cx="400" cy="400" r="48" fill="#9A4D2F"/>
+  <path d="M400 314L418 370L476 370L429 404L446 460L400 425L354 460L371 404L324 370L382 370L400 314Z" fill="#FFF6ED"/>
+  <g opacity="0.84" fill="#FFF6ED">
+    <circle cx="400" cy="98" r="8"/>
+    <circle cx="400" cy="702" r="8"/>
+    <circle cx="98" cy="400" r="8"/>
+    <circle cx="702" cy="400" r="8"/>
+    <circle cx="186" cy="186" r="8"/>
+    <circle cx="614" cy="186" r="8"/>
+    <circle cx="186" cy="614" r="8"/>
+    <circle cx="614" cy="614" r="8"/>
+  </g>
+  <defs>
+    <linearGradient id="bg" x1="116" y1="72" x2="698" y2="744" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F4E0CC"/>
+      <stop offset="1" stop-color="#FFF9F2"/>
+    </linearGradient>
+  </defs>
+</svg>

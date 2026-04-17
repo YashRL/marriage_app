@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="site-shell">
+  <header class="topbar home-topbar">
+    <div>
+      <a class="brand" href="/">Vivah Jyot</a>
+      <p class="topbar-note">Marriage dashboard</p>
+    </div>
+    <div class="home-actions">
+      <span class="user-pill">{{ user }}</span>
+      <button id="logoutBtn" class="secondary-btn" type="button">Logout</button>
+    </div>
+  </header>
+
+  <main class="home-main">
+    <section class="home-hero">
+      <div>
+        <p class="eyebrow">After login home page</p>
+        <h1>Welcome, {{ user }}</h1>
+        <p>Manage a profile, browse matches, and keep the experience simple and clear.</p>
+      </div>
+      <img src="/static/images/cosmic-match.svg" alt="Astrology home illustration">
+    </section>
+
+    <section class="dashboard-grid">
+      <article class="panel">
+        <div class="panel-heading">
+          <h2>Create Profile</h2>
+          <p>Add marriage details and contact information.</p>
+        </div>
+
+        <div class="form-grid">
+          <label for="fullName">Full Name</label>
+          <input id="fullName" type="text" placeholder="Full name">
+
+          <label for="gender">Gender</label>
+          <select id="gender">
+            <option value="">Select gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+
+          <label for="dob">Date of Birth</label>
+          <input id="dob" type="date">
+
+          <label for="gotra">Gotra</label>
+          <input id="gotra" type="text" placeholder="Gotra">
+
+          <label for="manglik">Manglik</label>
+          <select id="manglik">
+            <option value="">Select option</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+
+          <label for="education">Education</label>
+          <input id="education" type="text" placeholder="Education">
+
+          <label for="occupation">Occupation</label>
+          <input id="occupation" type="text" placeholder="Occupation">
+
+          <label for="city">City</label>
+          <input id="city" type="text" placeholder="City">
+
+          <label for="contactPhone">Phone</label>
+          <input id="contactPhone" type="text" placeholder="Phone number">
+
+          <label for="contactEmail">Email</label>
+          <input id="contactEmail" type="email" placeholder="Email address">
+
+          <label for="about">About</label>
+          <textarea id="about" rows="4" placeholder="Short introduction"></textarea>
+
+          <label for="photo">Photo</label>
+          <input id="photo" type="file" accept="image/*">
+        </div>
+
+        <div class="panel-actions">
+          <button id="saveProfileBtn" class="primary-btn" type="button">Save Profile</button>
+          <p id="profileMessage" class="status-message" aria-live="polite"></p>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <h2>Browse Profiles</h2>
+          <p>Filter by city and gender.</p>
+        </div>
+
+        <div class="filters">
+          <div>
+            <label for="filterGender">Gender</label>
+            <select id="filterGender">
+              <option value="All">All</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+          <div>
+            <label for="filterCity">City</label>
+            <input id="filterCity" type="text" placeholder="Search city">
+          </div>
+          <button id="loadProfilesBtn" class="secondary-btn" type="button">Refresh</button>
+        </div>
+
+        <div class="results-heading">
+          <h3>Available profiles</h3>
+          <span id="profilesCount">0 profiles</span>
+        </div>
+
+        <div id="profiles" class="profiles-list"></div>
+      </article>
+    </section>
+  </main>
+</div>
+
+<script src="/static/home.js"></script>
+{% endblock %}

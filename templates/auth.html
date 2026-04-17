@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Login or Signup{% endblock %}
+
+{% block content %}
+<div class="page-center">
+  <div class="auth-layout">
+    <section class="auth-aside">
+      <p class="eyebrow">Welcome</p>
+      <h1>Login or create your matrimony account.</h1>
+      <p>
+        Continue from the landing page into a simple sign in flow. After login, you will reach your home page and can manage profiles there.
+      </p>
+      <div class="auth-art">
+        <img src="/static/images/astrology-wheel.svg" alt="Astrology art">
+      </div>
+    </section>
+
+    <section class="auth-card">
+      <div class="mode-tabs">
+        <button id="signinTab" class="mode-tab active" type="button">Login</button>
+        <button id="signupTab" class="mode-tab" type="button">Signup</button>
+      </div>
+
+      <h2 id="authHeading">Welcome back</h2>
+      <p class="auth-subtext" id="authSubtext">Sign in to continue to your home page.</p>
+
+      <div class="form-stack">
+        <label for="authLogin">Username</label>
+        <input id="authLogin" type="text" placeholder="Enter your username">
+
+        <label for="authPassword">Password</label>
+        <input id="authPassword" type="password" placeholder="Enter your password">
+
+        <button id="authSubmit" class="primary-btn" type="button">Login</button>
+        <p id="authMessage" class="status-message" aria-live="polite"></p>
+      </div>
+
+      <a class="back-link" href="/">Back to landing page</a>
+    </section>
+  </div>
+</div>
+
+<script src="/static/auth.js"></script>
+{% endblock %}
