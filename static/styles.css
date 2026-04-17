@@ -31,6 +31,46 @@ body {
   min-height: 100vh;
 }
 
+.site-footer {
+  margin-top: 28px;
+  padding: 0 0 22px;
+}
+
+.site-footer-inner {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid rgba(240, 156, 38, 0.16);
+  color: var(--muted);
+}
+
+.site-footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.site-footer-brand strong {
+  display: block;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.2rem;
+  color: var(--text);
+}
+
+.site-footer-brand p,
+.site-footer-copy {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.site-footer-copy {
+  text-align: right;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -1497,6 +1537,16 @@ h3 {
   .site-shell,
   .page-center {
     width: min(100% - 24px, 1180px);
+  }
+
+  .site-footer-inner {
+    width: min(100% - 24px, 1180px);
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .site-footer-copy {
+    text-align: left;
   }
 
   .info-card,
