@@ -1,31 +1,29 @@
 import base64
 import os
-from datetime import date
+from pathlib import Path
 
 import psycopg
-import streamlit as st
 from dotenv import load_dotenv
+from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from fastapi.templating import Jinja2Templates
 
 load_dotenv()
+BASE_DIR = Path(__file__).resolve().parent
 DB_URL = os.getenv("SUPA_POOL_URL") or os.getenv("SUPA_BASS", "")
+COOKIE_NAME = "nb_user"
 
-st.set_page_config(page_title="Nagar Brahmin Matrimony", page_icon="🧡", layout="centered")
+app = FastAPI(title="Nagar Brahmin Matrimony")
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 
 def db():
     if not DB_URL:
-        st.error("Missing DB URL. Set SUPA_POOL_URL in .env (recommended).")
-        st.stop()
+        raise RuntimeError("Missing DB URL. Set SUPA_POOL_URL in .env.")
     try:
         return psycopg.connect(DB_URL)
-    except Exception:
-        st.error(
-            "Database connection failed. Your direct Supabase URL is IPv6-only.\n\n"
-            "Use shared pooler IPv4 URL in `.env`:\n"
-            "`SUPA_POOL_URL=postgresql://postgres.<PROJECT_REF>:<PASSWORD>@<POOLER_HOST>:6543/postgres?sslmode=require`\n\n"
-            "Get this exact string from Supabase Dashboard -> Connect -> Connection pooling."
-        )
-        st.stop()
+    except Exception as exc:
+        raise RuntimeError("Database connection failed. Check SUPA_POOL_URL in .env.") from exc
 
 
 def init_db():
@@ -63,142 +61,198 @@ def init_db():
 
 def sign_up(login, password):
     with db() as conn, conn.cursor() as cur:
-        cur.execute("insert into nb_users(login,password) values(%s,%s) on conflict (login) do nothing", (login.strip(), password))
+        cur.execute(
+            "insert into nb_users(login,password) values(%s,%s) on conflict (login) do nothing",
+            (login.strip(), password),
+        )
         return cur.rowcount == 1
 
 
 def sign_in(login, password):
     with db() as conn, conn.cursor() as cur:
-        cur.execute("select login from nb_users where login=%s and password=%s", (login.strip(), password))
-        return cur.fetchone()
+        cur.execute(
+            "select login from nb_users where login=%s and password=%s",
+            (login.strip(), password),
+        )
+        row = cur.fetchone()
+        return row[0] if row else None
 
 
-def save_profile(user_login, form, photo):
-    photo_b64 = base64.b64encode(photo.getvalue()).decode() if photo else ""
+def save_profile(created_by_login, data, photo):
+    photo_b64 = base64.b64encode(photo).decode() if photo else ""
     with db() as conn, conn.cursor() as cur:
         cur.execute(
             """
-            insert into nb_profiles(created_by_login,full_name,gender,dob,gotra,manglik,education,occupation,city,about,contact_phone,contact_email,photo_b64)
-            values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+            insert into nb_profiles(
+                created_by_login,full_name,gender,dob,gotra,manglik,education,
+                occupation,city,about,contact_phone,contact_email,photo_b64
+            ) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
             """,
-            (user_login, form["full_name"], form["gender"], form["dob"], form["gotra"], form["manglik"], form["education"], form["occupation"], form["city"], form["about"], form["contact_phone"], form["contact_email"], photo_b64),
+            (
+                created_by_login,
+                data["full_name"],
+                data["gender"],
+                data["dob"],
+                data["gotra"],
+                data["manglik"],
+                data["education"],
+                data["occupation"],
+                data["city"],
+                data["about"],
+                data["contact_phone"],
+                data["contact_email"],
+                photo_b64,
+            ),
         )
 
 
 def list_profiles(gender, city):
-    q = "select full_name,gender,dob,gotra,manglik,education,occupation,city,about,contact_phone,contact_email,photo_b64,created_at from nb_profiles where 1=1"
+    query = """
+        select full_name,gender,dob,gotra,manglik,education,occupation,city,about,
+               contact_phone,contact_email,photo_b64,created_at
+        from nb_profiles
+        where 1=1
+    """
     args = []
-    if gender != "All":
-        q += " and gender=%s"
+    if gender and gender != "All":
+        query += " and gender=%s"
         args.append(gender)
     if city:
-        q += " and city ilike %s"
+        query += " and city ilike %s"
         args.append(f"%{city.strip()}%")
-    q += " order by created_at desc"
+    query += " order by created_at desc"
     with db() as conn, conn.cursor() as cur:
-        cur.execute(q, args)
-        return cur.fetchall()
-
-
-init_db()
-st.title("Nagar Brahmin Matrimony")
-st.caption("Simple community prototype for families and elders")
-
-if "user" not in st.session_state:
-    st.session_state.user = None
-
-if not st.session_state.user:
-    mode = st.radio("Start", ["Sign In", "Sign Up"], horizontal=True)
-    login = st.text_input("Email or Phone")
-    password = st.text_input("Password", type="password")
-    if st.button(mode):
-        if not login or not password:
-            st.warning("Please fill both fields.")
-        elif mode == "Sign Up":
-            if sign_up(login, password):
-                st.success("Account created. Please sign in.")
-            else:
-                st.error("Account already exists.")
-        else:
-            user = sign_in(login, password)
-            if user:
-                st.session_state.user = {"login": user[0]}
-                st.rerun()
-            else:
-                st.error("Invalid login.")
-    st.stop()
-
-nav = st.radio("Menu", ["Create Profile", "Browse Profiles", "My Account"], horizontal=True)
-
-if nav == "Create Profile":
-    with st.form("profile"):
-        full_name = st.text_input("Full Name")
-        gender = st.selectbox("Gender", ["Male", "Female", "Other"])
-        dob = st.date_input("Date of Birth", value=date(1998, 1, 1), min_value=date(1960, 1, 1), max_value=date.today())
-        gotra = st.text_input("Gotra")
-        manglik = st.selectbox("Manglik", ["No", "Yes", "Not Sure"])
-        education = st.text_input("Education")
-        occupation = st.text_input("Occupation")
-        city = st.text_input("City")
-        contact_phone = st.text_input("Contact Phone")
-        contact_email = st.text_input("Contact Email")
-        about = st.text_area("About / Family Details")
-        photo = st.file_uploader("Photo", type=["jpg", "jpeg", "png"])
-        ok = st.form_submit_button("Save Profile")
-    if ok:
-        if not full_name:
-            st.warning("Full name is required.")
-        else:
-            save_profile(
-                st.session_state.user["login"],
-                {
-                    "full_name": full_name,
-                    "gender": gender,
-                    "dob": dob,
-                    "gotra": gotra,
-                    "manglik": manglik,
-                    "education": education,
-                    "occupation": occupation,
-                    "city": city,
-                    "about": about,
-                    "contact_phone": contact_phone,
-                    "contact_email": contact_email,
-                },
-                photo,
-            )
-            st.success("Profile saved.")
-
-elif nav == "Browse Profiles":
-    c1, c2 = st.columns(2)
-    with c1:
-        g = st.selectbox("Filter Gender", ["All", "Male", "Female", "Other"])
-    with c2:
-        c = st.text_input("Filter City")
-    rows = list_profiles(g, c)
-    st.caption(f"{len(rows)} profile(s)")
-    for r in rows:
-        name, gender, dob, gotra, manglik, edu, occ, city, about, phone, email, photo_b64, created = r
-        age = (date.today() - dob).days // 365 if dob else "-"
-        img = (
-            f"<img src='data:image/jpeg;base64,{photo_b64}' style='width:84px;height:84px;border-radius:12px;object-fit:cover;border:1px solid #ead7bf'/>"
-            if photo_b64
-            else ""
+        cur.execute(query, args)
+        rows = cur.fetchall()
+    profiles = []
+    for row in rows:
+        profiles.append(
+            {
+                "full_name": row[0],
+                "gender": row[1],
+                "dob": row[2].isoformat() if row[2] else "",
+                "gotra": row[3] or "",
+                "manglik": row[4] or "",
+                "education": row[5] or "",
+                "occupation": row[6] or "",
+                "city": row[7] or "",
+                "about": row[8] or "",
+                "contact_phone": row[9] or "",
+                "contact_email": row[10] or "",
+                "photo_b64": row[11] or "",
+                "created_at": row[12].isoformat() if row[12] else "",
+            }
         )
-        st.markdown(
-            f"""
-            <div class='card'>
-                <div style='display:flex;gap:12px;align-items:center'>{img}<div><h4 style='margin:0'>{name}</h4><small>{gender} | {age} yrs | {city or '-'}</small></div></div>
-                <p style='margin:.6rem 0 0'><b>Gotra:</b> {gotra or '-'} | <b>Manglik:</b> {manglik or '-'}<br><b>Education:</b> {edu or '-'}<br><b>Occupation:</b> {occ or '-'}<br><b>Contact:</b> {phone or '-'} / {email or '-'}<br><b>About:</b> {about or '-'}</p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+    return profiles
 
-else:
-    st.write(f"Signed in as: `{st.session_state.user['login']}`")
-    if st.button("Logout"):
-        st.session_state.user = None
-        st.rerun()
 
-st.markdown("---")
-st.caption("Developed by Yash Mahesh Rawal | जय हत्केश")
+def current_user(request: Request):
+    return request.cookies.get(COOKIE_NAME, "").strip()
+
+
+@app.on_event("startup")
+def on_startup():
+    init_db()
+
+
+@app.get("/", response_class=HTMLResponse)
+def index(request: Request):
+    return templates.TemplateResponse(request, "index.html")
+
+
+@app.get("/assets/1.jpg")
+def image_asset():
+    return FileResponse(BASE_DIR / "1.jpg")
+
+
+@app.get("/favicon.ico")
+def favicon():
+    return FileResponse(BASE_DIR / "1.jpg")
+
+
+@app.get("/api/session")
+def session(request: Request):
+    user = current_user(request)
+    return {"logged_in": bool(user), "login": user}
+
+
+@app.post("/api/signup")
+async def api_signup(request: Request):
+    data = await request.json()
+    login = (data.get("login") or "").strip()
+    password = data.get("password") or ""
+    if not login or not password:
+        raise HTTPException(status_code=400, detail="Please fill both fields.")
+    if not sign_up(login, password):
+        raise HTTPException(status_code=400, detail="Account already exists.")
+    return {"message": "Account created. Please sign in."}
+
+
+@app.post("/api/signin")
+async def api_signin(request: Request):
+    data = await request.json()
+    login = (data.get("login") or "").strip()
+    password = data.get("password") or ""
+    user = sign_in(login, password)
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid login.")
+    response = JSONResponse({"message": "Signed in.", "login": user})
+    response.set_cookie(COOKIE_NAME, user, httponly=True, samesite="lax")
+    return response
+
+
+@app.post("/api/signout")
+def api_signout():
+    response = JSONResponse({"message": "Signed out."})
+    response.delete_cookie(COOKIE_NAME)
+    return response
+
+
+@app.get("/api/profiles")
+def api_profiles(gender: str = "All", city: str = ""):
+    return {"profiles": list_profiles(gender, city)}
+
+
+@app.post("/api/profiles")
+async def api_create_profile(
+    request: Request,
+    full_name: str = Form(...),
+    gender: str = Form(""),
+    dob: str = Form(""),
+    gotra: str = Form(""),
+    manglik: str = Form(""),
+    education: str = Form(""),
+    occupation: str = Form(""),
+    city: str = Form(""),
+    about: str = Form(""),
+    contact_phone: str = Form(""),
+    contact_email: str = Form(""),
+    photo: UploadFile | None = File(default=None),
+):
+    user = current_user(request)
+    if not user:
+        raise HTTPException(status_code=401, detail="Please sign in first.")
+    photo_bytes = await photo.read() if photo and photo.filename else b""
+    save_profile(
+        user,
+        {
+            "full_name": full_name.strip(),
+            "gender": gender,
+            "dob": dob or None,
+            "gotra": gotra.strip(),
+            "manglik": manglik,
+            "education": education.strip(),
+            "occupation": occupation.strip(),
+            "city": city.strip(),
+            "about": about.strip(),
+            "contact_phone": contact_phone.strip(),
+            "contact_email": contact_email.strip(),
+        },
+        photo_bytes,
+    )
+    return {"message": "Profile saved."}
+
+
+@app.get("/health")
+def health():
+    return {"ok": True}

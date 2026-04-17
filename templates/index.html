@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nagar Brahmin Matrimony</title>
+  <style>
+    :root {
+      --primary: #f09b24;
+      --primary-dark: #c77b10;
+      --primary-soft: #f7d7a0;
+      --bg: #fff8ef;
+      --surface: #fffdf9;
+      --border: #f1dfc2;
+      --text: #392813;
+      --muted: #7f664b;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(240, 155, 36, 0.16), transparent 20%),
+        linear-gradient(180deg, #fffdf8 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+
+    img { max-width: 100%; display: block; }
+    button, input, select, textarea { font: inherit; }
+
+    .page {
+      width: min(100%, 1120px);
+      margin: 0 auto;
+      padding: 24px 16px 56px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .brand {
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.6rem, 9vw, 4.8rem);
+      line-height: 0.94;
+      margin: 0 0 16px;
+      letter-spacing: -0.05em;
+    }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 34rem;
+      line-height: 1.7;
+      margin: 0 0 18px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .hero-media {
+      position: relative;
+      min-height: 360px;
+    }
+
+    .media-card {
+      position: absolute;
+      overflow: hidden;
+      background: var(--surface);
+      box-shadow: 0 22px 50px rgba(96, 62, 22, 0.12);
+    }
+
+    .media-main {
+      width: 68%;
+      height: 78%;
+      top: 3%;
+      left: 16%;
+    }
+
+    .media-side {
+      width: 24%;
+      height: 30%;
+      top: 0;
+      right: 0;
+    }
+
+    .media-small {
+      width: 24%;
+      height: 26%;
+      left: 0;
+      bottom: 10%;
+      border-radius: 999px 999px 0 0;
+    }
+
+    .media-accent {
+      width: 38%;
+      height: 20%;
+      left: 10%;
+      bottom: 0;
+      background: rgba(240, 155, 36, 0.18);
+      box-shadow: none;
+    }
+
+    .section-label {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin: 24px 0 34px;
+    }
+
+    .info-card,
+    .panel,
+    .profile-card {
+      background: rgba(255, 255, 255, 0.64);
+      border-radius: 20px;
+      backdrop-filter: blur(4px);
+    }
+
+    .info-card {
+      overflow: hidden;
+    }
+
+    .info-card img {
+      aspect-ratio: 4/4.6;
+      object-fit: cover;
+    }
+
+    .info-body {
+      padding: 14px;
+    }
+
+    .info-body h3,
+    .panel h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      margin: 0 0 8px;
+      font-size: 1.55rem;
+      font-weight: 500;
+    }
+
+    .info-body p,
+    .panel p,
+    .meta,
+    .profile-copy {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      margin-bottom: 34px;
+    }
+
+    .panel {
+      padding: 18px;
+    }
+
+    .panel img {
+      width: 100%;
+      border-radius: 18px;
+      object-fit: cover;
+      aspect-ratio: 4/3;
+    }
+
+    .auth-shell,
+    .app-shell {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+
+    .auth-panel,
+    .app-panel {
+      padding: 22px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 20px;
+    }
+
+    .app-panel { display: none; }
+    .hidden { display: none !important; }
+
+    .auth-title {
+      margin: 0 0 6px;
+      font-size: 1.55rem;
+      font-weight: 700;
+    }
+
+    .auth-copy {
+      margin: 0 0 18px;
+      color: var(--muted);
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--primary-dark);
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(240, 155, 36, 0.28);
+      border-radius: var(--radius);
+      background: transparent;
+      padding: 12px 13px;
+      color: var(--text);
+      outline: none;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: rgba(240, 155, 36, 0.28);
+      outline: none;
+      box-shadow: none;
+    }
+
+    input[type="password"]::-ms-reveal,
+    input[type="password"]::-ms-clear {
+      display: none;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, #f3ac43 0%, var(--primary) 100%);
+      color: #fff;
+      padding: 12px 16px;
+      min-height: 46px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn.secondary {
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .auth-switch {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .auth-switch a {
+      color: var(--primary-dark);
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .toolbar h2 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav button.active {
+      color: #fff;
+      background: linear-gradient(180deg, #f3ac43 0%, var(--primary) 100%);
+      border-color: transparent;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .profiles {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .profile-card {
+      padding: 16px;
+    }
+
+    .profile-head {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .avatar {
+      width: 82px;
+      height: 82px;
+      border-radius: 16px;
+      object-fit: cover;
+      background: rgba(240, 155, 36, 0.1);
+    }
+
+    .profile-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 0 0 4px;
+    }
+
+    .message {
+      margin-bottom: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      display: none;
+    }
+
+    .message.show { display: block; }
+    .message.error { background: #fff1f1; color: #8c2d2d; }
+    .message.success { background: #f0fff4; color: #21603a; }
+
+    @media (min-width: 860px) {
+      .hero {
+        grid-template-columns: minmax(320px, 0.9fr) minmax(420px, 1.1fr);
+      }
+
+      .cards {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .split,
+      .auth-shell,
+      .app-shell {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .field-grid.two {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topbar">
+      <div class="brand">Nagar Brahmin Matrimony</div>
+      <div class="top-actions">
+        <button class="ghost" type="button" id="openAuthBtn">Sign In</button>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div>
+        <div class="section-label">Community Matrimony</div>
+        <h1>Simple profiles for families seeking the right match.</h1>
+        <p>Create a marriage profile, upload a photo, and browse community profiles in a cleaner, easier web app built for the Nagar Brahmin community.</p>
+        <div class="hero-actions">
+          <button class="btn" type="button" id="heroStartBtn">Get Started</button>
+        </div>
+      </div>
+      <div class="hero-media">
+        <div class="media-card media-main"><img src="/assets/1.jpg" alt="Community"></div>
+        <div class="media-card media-side"><img src="/assets/1.jpg" alt="Community"></div>
+        <div class="media-card media-small"><img src="/assets/1.jpg" alt="Community"></div>
+        <div class="media-card media-accent"></div>
+      </div>
+    </section>
+
+    <section class="cards">
+      <article class="info-card">
+        <img src="/assets/1.jpg" alt="Profile creation">
+        <div class="info-body">
+          <h3>Easy Profile</h3>
+          <p>Add photo, gotra, education, occupation, city, and family details without a complicated flow.</p>
+        </div>
+      </article>
+      <article class="info-card">
+        <img src="/assets/1.jpg" alt="Browse matches">
+        <div class="info-body">
+          <h3>Browse Matches</h3>
+          <p>See all community profiles in one place with direct contact details for families to connect quickly.</p>
+        </div>
+      </article>
+      <article class="info-card">
+        <img src="/assets/1.jpg" alt="Mobile friendly">
+        <div class="info-body">
+          <h3>Mobile Friendly</h3>
+          <p>Designed to stay simple and readable on phones so parents and elders can use it without confusion.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="split">
+      <article class="panel">
+        <div class="section-label">Why this app</div>
+        <h2>Clean enough for a prototype, simple enough for daily use.</h2>
+        <p>The app keeps the core matrimony workflow focused: sign in, create a profile, and browse visible profiles with contact information.</p>
+      </article>
+      <article class="panel">
+        <img src="/assets/1.jpg" alt="Families">
+      </article>
+    </section>
+
+    <section class="auth-shell" id="authShell">
+      <article class="auth-panel">
+        <div id="authMessage" class="message"></div>
+        <h2 class="auth-title" id="authTitle">Welcome Back</h2>
+        <p class="auth-copy">Use your email or phone number to continue.</p>
+        <div class="field-grid">
+          <div>
+            <label for="authLogin">Email or Phone</label>
+            <input id="authLogin" type="text" autocomplete="username">
+          </div>
+          <div>
+            <label for="authPassword">Password</label>
+            <input id="authPassword" type="password" autocomplete="current-password">
+          </div>
+        </div>
+        <div style="margin-top:16px;">
+          <button class="btn" id="authSubmitBtn" type="button">Sign In</button>
+        </div>
+        <div class="auth-switch" id="authSwitch"></div>
+      </article>
+
+      <article class="auth-panel">
+        <div class="section-label">What you can do</div>
+        <h2 class="auth-title">Built for profile posting and community browsing.</h2>
+        <p class="auth-copy">Sign up, create a profile for the person seeking marriage, upload a photo, and browse all visible profiles on one page.</p>
+        <div class="field-grid">
+          <div class="panel" style="padding:14px;">
+            <h2 style="font-size:1.2rem;">Profile details</h2>
+            <p class="meta">Name, gender, date of birth, gotra, manglik, education, city, occupation and family details.</p>
+          </div>
+          <div class="panel" style="padding:14px;">
+            <h2 style="font-size:1.2rem;">Direct contact</h2>
+            <p class="meta">Phone and email stay visible in the profile list so families can connect immediately.</p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="app-shell hidden" id="appShell">
+      <article class="app-panel" style="display:block;">
+        <div class="toolbar">
+          <div>
+            <h2 id="welcomeUser">Welcome</h2>
+            <div class="meta">Signed in and ready to manage profiles.</div>
+          </div>
+          <div class="btn-row">
+            <button class="ghost" type="button" id="logoutBtn">Logout</button>
+          </div>
+        </div>
+        <div class="nav">
+          <button class="ghost active" type="button" data-section="createSection">Create Profile</button>
+          <button class="ghost" type="button" data-section="browseSection">Browse Profiles</button>
+        </div>
+      </article>
+
+      <article class="app-panel section active" id="createSection" style="display:block;">
+        <div id="profileMessage" class="message"></div>
+        <h2>Create Profile</h2>
+        <div class="field-grid two">
+          <div>
+            <label for="fullName">Full Name</label>
+            <input id="fullName" type="text">
+          </div>
+          <div>
+            <label for="gender">Gender</label>
+            <select id="gender">
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div>
+            <label for="dob">Date of Birth</label>
+            <input id="dob" type="date">
+          </div>
+          <div>
+            <label for="gotra">Gotra</label>
+            <input id="gotra" type="text">
+          </div>
+          <div>
+            <label for="manglik">Manglik</label>
+            <select id="manglik">
+              <option>No</option>
+              <option>Yes</option>
+              <option>Not Sure</option>
+            </select>
+          </div>
+          <div>
+            <label for="education">Education</label>
+            <input id="education" type="text">
+          </div>
+          <div>
+            <label for="occupation">Occupation</label>
+            <input id="occupation" type="text">
+          </div>
+          <div>
+            <label for="city">City</label>
+            <input id="city" type="text">
+          </div>
+          <div>
+            <label for="contactPhone">Contact Phone</label>
+            <input id="contactPhone" type="text">
+          </div>
+          <div>
+            <label for="contactEmail">Contact Email</label>
+            <input id="contactEmail" type="email">
+          </div>
+          <div style="grid-column:1/-1;">
+            <label for="about">About / Family Details</label>
+            <textarea id="about"></textarea>
+          </div>
+          <div style="grid-column:1/-1;">
+            <label for="photo">Photo</label>
+            <input id="photo" type="file" accept=".jpg,.jpeg,.png">
+          </div>
+        </div>
+        <div style="margin-top:16px;">
+          <button class="btn" type="button" id="saveProfileBtn">Save Profile</button>
+        </div>
+      </article>
+
+      <article class="app-panel section" id="browseSection">
+        <div class="toolbar">
+          <div>
+            <h2>Browse Profiles</h2>
+            <div class="meta" id="profilesCount">0 profiles</div>
+          </div>
+        </div>
+        <div class="filters">
+          <div>
+            <label for="filterGender">Filter Gender</label>
+            <select id="filterGender">
+              <option>All</option>
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div>
+            <label for="filterCity">Filter City</label>
+            <input id="filterCity" type="text" placeholder="City">
+          </div>
+        </div>
+        <div class="btn-row" style="margin-bottom:16px;">
+          <button class="btn" type="button" id="loadProfilesBtn">Refresh Profiles</button>
+        </div>
+        <div class="profiles" id="profiles"></div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const authState = { mode: "signin" };
+    const authTitle = document.getElementById("authTitle");
+    const authSubmitBtn = document.getElementById("authSubmitBtn");
+    const authSwitch = document.getElementById("authSwitch");
+    const authMessage = document.getElementById("authMessage");
+    const authShell = document.getElementById("authShell");
+    const appShell = document.getElementById("appShell");
+    const welcomeUser = document.getElementById("welcomeUser");
+    const profilesNode = document.getElementById("profiles");
+    const profilesCount = document.getElementById("profilesCount");
+    const profileMessage = document.getElementById("profileMessage");
+
+    function setMessage(node, type, text) {
+      node.className = "message show " + type;
+      node.textContent = text;
+    }
+
+    function clearMessage(node) {
+      node.className = "message";
+      node.textContent = "";
+    }
+
+    function setAuthMode(mode) {
+      authState.mode = mode;
+      authTitle.textContent = mode === "signin" ? "Welcome Back" : "Create Account";
+      authSubmitBtn.textContent = mode === "signin" ? "Sign In" : "Sign Up";
+      authSwitch.innerHTML = mode === "signin"
+        ? 'New here? <a data-mode="signup">Create an account</a>'
+        : 'Already have an account? <a data-mode="signin">Sign in</a>';
+      clearMessage(authMessage);
+    }
+
+    async function api(url, options = {}) {
+      const response = await fetch(url, {
+        credentials: "same-origin",
+        headers: { "Accept": "application/json", ...(options.body instanceof FormData ? {} : { "Content-Type": "application/json" }) },
+        ...options
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.detail || data.message || "Something went wrong.");
+      return data;
+    }
+
+    function ageFromDob(dob) {
+      if (!dob) return "-";
+      const diff = Date.now() - new Date(dob).getTime();
+      return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+    }
+
+    function renderProfiles(items) {
+      profilesNode.innerHTML = "";
+      profilesCount.textContent = `${items.length} profile${items.length === 1 ? "" : "s"}`;
+      if (!items.length) {
+        profilesNode.innerHTML = '<div class="panel"><p class="meta">No profiles found.</p></div>';
+        return;
+      }
+      for (const item of items) {
+        const card = document.createElement("article");
+        card.className = "profile-card";
+        const img = item.photo_b64
+          ? `<img class="avatar" src="data:image/jpeg;base64,${item.photo_b64}" alt="${item.full_name}">`
+          : `<div class="avatar"></div>`;
+        card.innerHTML = `
+          <div class="profile-head">
+            ${img}
+            <div>
+              <div class="profile-title">${item.full_name}</div>
+              <div class="meta">${item.gender || "-"} | ${ageFromDob(item.dob)} yrs | ${item.city || "-"}</div>
+            </div>
+          </div>
+          <div class="profile-copy">
+            <strong>Gotra:</strong> ${item.gotra || "-"} |
+            <strong>Manglik:</strong> ${item.manglik || "-"}<br>
+            <strong>Education:</strong> ${item.education || "-"}<br>
+            <strong>Occupation:</strong> ${item.occupation || "-"}<br>
+            <strong>Contact:</strong> ${item.contact_phone || "-"} / ${item.contact_email || "-"}<br>
+            <strong>About:</strong> ${item.about || "-"}
+          </div>
+        `;
+        profilesNode.appendChild(card);
+      }
+    }
+
+    async function loadProfiles() {
+      const gender = document.getElementById("filterGender").value;
+      const city = document.getElementById("filterCity").value.trim();
+      const params = new URLSearchParams({ gender, city });
+      const data = await api(`/api/profiles?${params.toString()}`, { method: "GET" });
+      renderProfiles(data.profiles);
+    }
+
+    async function checkSession() {
+      const data = await api("/api/session", { method: "GET" });
+      if (data.logged_in) {
+        authShell.classList.add("hidden");
+        appShell.classList.remove("hidden");
+        welcomeUser.textContent = `Welcome, ${data.login}`;
+        document.getElementById("openAuthBtn").classList.add("hidden");
+        await loadProfiles();
+      } else {
+        authShell.classList.remove("hidden");
+        appShell.classList.add("hidden");
+        document.getElementById("openAuthBtn").classList.remove("hidden");
+      }
+    }
+
+    document.getElementById("heroStartBtn").addEventListener("click", () => {
+      authShell.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.getElementById("openAuthBtn").addEventListener("click", () => {
+      authShell.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    authSwitch.addEventListener("click", (event) => {
+      const mode = event.target.dataset.mode;
+      if (!mode) return;
+      setAuthMode(mode);
+    });
+
+    authSubmitBtn.addEventListener("click", async () => {
+      const login = document.getElementById("authLogin").value.trim();
+      const password = document.getElementById("authPassword").value;
+      clearMessage(authMessage);
+      try {
+        if (authState.mode === "signin") {
+          await api("/api/signin", { method: "POST", body: JSON.stringify({ login, password }) });
+          await checkSession();
+        } else {
+          const data = await api("/api/signup", { method: "POST", body: JSON.stringify({ login, password }) });
+          setMessage(authMessage, "success", data.message);
+          setAuthMode("signin");
+        }
+      } catch (error) {
+        setMessage(authMessage, "error", error.message);
+      }
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      await api("/api/signout", { method: "POST" });
+      await checkSession();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    document.querySelectorAll(".nav button").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".nav button").forEach((node) => node.classList.remove("active"));
+        document.querySelectorAll(".section").forEach((node) => node.classList.remove("active"));
+        button.classList.add("active");
+        document.getElementById(button.dataset.section).classList.add("active");
+      });
+    });
+
+    document.getElementById("saveProfileBtn").addEventListener("click", async () => {
+      clearMessage(profileMessage);
+      const form = new FormData();
+      form.append("full_name", document.getElementById("fullName").value.trim());
+      form.append("gender", document.getElementById("gender").value);
+      form.append("dob", document.getElementById("dob").value);
+      form.append("gotra", document.getElementById("gotra").value.trim());
+      form.append("manglik", document.getElementById("manglik").value);
+      form.append("education", document.getElementById("education").value.trim());
+      form.append("occupation", document.getElementById("occupation").value.trim());
+      form.append("city", document.getElementById("city").value.trim());
+      form.append("about", document.getElementById("about").value.trim());
+      form.append("contact_phone", document.getElementById("contactPhone").value.trim());
+      form.append("contact_email", document.getElementById("contactEmail").value.trim());
+      const file = document.getElementById("photo").files[0];
+      if (file) form.append("photo", file);
+      try {
+        const data = await api("/api/profiles", { method: "POST", body: form });
+        setMessage(profileMessage, "success", data.message);
+        await loadProfiles();
+      } catch (error) {
+        setMessage(profileMessage, "error", error.message);
+      }
+    });
+
+    document.getElementById("loadProfilesBtn").addEventListener("click", loadProfiles);
+    document.getElementById("filterGender").addEventListener("change", loadProfiles);
+    document.getElementById("filterCity").addEventListener("input", loadProfiles);
+
+    setAuthMode("signin");
+    checkSession();
+  </script>
+</body>
+</html>
