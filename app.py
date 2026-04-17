@@ -1,203 +1,204 @@
+import base64
 import os
+from datetime import date
+
+import psycopg
 import streamlit as st
-from pymongo import MongoClient
-import datetime
-import uuid
+from dotenv import load_dotenv
 
-# Connect to MongoDB and create a new database and collection
-client = MongoClient(os.getenv('MONGO_URL'))
-db = client['new_database']  # New database
-collection = db['new_collection']  # New collection
+load_dotenv()
+DB_URL = os.getenv("SUPA_POOL_URL") or os.getenv("SUPA_BASS", "")
 
-def post_page():
-    st.title("Post Page")
-    
-    # Add a centered image
-    st.image("1.jpg", use_column_width=True)
-
-    # Type of Brahmin
-    type_of_brahmin = st.text_input("Type of Brahmin (ब्राह्मण का प्रकार)")
-
-    # Gotra
-    gotra = st.text_input("Gotra (गोत्र)")
-
-    # Name
-    name = st.text_input("Name (नाम)")
-
-    # Father Name
-    father_name = st.text_input("Father Name (पिता का नाम)")
-
-    # Mother Name
-    mother_name = st.text_input("Mother Name (माँ का नाम)")
-
-    # Sex
-    sex = st.radio("Gender (लिंग)", ["Male", "Female"])
-
-    # Date of Birth
-    current_year = datetime.datetime.now().year
-    min_birth_year = 1980
-    dob = st.date_input("Date of Birth (जन्म की तारीख)", min_value=datetime.date(min_birth_year, 1, 1), max_value=datetime.date(current_year, 12, 31))
-
-    # Time of Birth
-    col1, col2, col3 = st.columns([1, 1, 1])
-    with col1:
-        hour = st.number_input("Hour (0-12)", min_value=0, max_value=12, step=1)
-    with col2:
-        minute = st.number_input("Minute (0-59)", min_value=0, max_value=59, step=1)
-    with col3:
-        am_pm = st.radio("AM/PM", ["AM", "PM"])
-
-    # Place of Birth
-    place_of_birth = st.text_area("Place of Birth (जन्म स्थान)")
-
-    # Height
-    height_feet = st.number_input("Height (Feet)")
-    height_meter = st.number_input("Height (Meter)")
-
-    # Body Type
-    body_type = st.text_input("Body Type (शरीर के प्रकार)")
-
-    # Color
-    color = st.text_input("Color (रंग)")
-
-    # Manglik Dosh
-    manglik_dosh = st.radio("Manglik Dosh (मांगलिक दोष)", ["Yes", "No"])
-
-    # Education
-    education = st.text_area("Education (शिक्षा)")
-
-    # Job/Work/Occupation
-    occupation = st.text_input("Job/Work/Occupation (नौकरी/कार्य/व्यवसाय)")
-
-    # Income
-    income = st.text_input("Income (आय)")
-
-    # Agriculture
-    agriculture = st.radio("Agriculture (कृषि)", ["Yes", "No"])
-
-    # Other Income Sources
-    other_income_sources = st.text_area("Other Income Sources (अन्य आय स्रोत)")
-
-    # Diet
-    diet = st.selectbox("Diet (आहार)", ["Vegetarian (शाकाहारी)", "Non-Vegetarian (मांसाहारी)", "Vegan (दूध ना पाइन वाले)", "Other (अन्य)"])
-
-    # Siblings
-    siblings = st.text_area("Siblings (भाई-बहन)")
-
-    # Permanent Address
-    permanent_address = st.text_area("Permanent Address (स्थायी पता)")
-
-    # Current Address
-    current_address = st.text_area("Current Address (वर्त्तमान पता)")
-
-    # Contact No.
-    contact_no = st.text_input("Contact No. (संपर्क नंबर।)")
-
-    # Mail
-    mail = st.text_input("Mail (मेल)")
-
-    # PostrerName
-    postrers_name = st.text_input("PostrerName (प्रेषक का नाम)")
-
-    # Additional Comments
-    additional_comments = st.text_area("Additional Comments (अतिरिक्त टिप्पणियां)")
-
-    # Process the form data when the main "Submit" button is clicked
-    if st.button("Submit"):
-        if 1 <= hour <= 12 and 0 <= minute <= 59:
-            time_of_birth = f"{hour:02d}:{minute:02d} {am_pm}"
-            # Create a document
-            user_data = {
-                "Type of Brahmin": type_of_brahmin,
-                "Gotra": gotra,
-                "Name": name,
-                "Father Name": father_name,
-                "Mother Name": mother_name,
-                "Sex": sex,
-                "Date of Birth": dob.strftime("%Y-%m-%d"),  # Convert date to string
-                "Time of Birth": time_of_birth,
-                "Place of Birth": place_of_birth,
-                "Height (Feet)": height_feet,
-                "Height (Meter)": height_meter,
-                "Body Type": body_type,
-                "Color": color,
-                "Manglik Dosh": manglik_dosh,
-                "Education": education,
-                "Job/Work/Occupation": occupation,
-                "Income": income,
-                "Agriculture": agriculture,
-                "Other Income Sources": other_income_sources,
-                "Diet": diet,
-                "Siblings": siblings,
-                "Permanent Address": permanent_address,
-                "Current Address": current_address,
-                "Contact No.": contact_no,
-                "Mail": mail,
-                "PostrerName": postrers_name,
-                "Additional Comments": additional_comments
-            }
-
-            # Insert the document into the new collection
-            collection.insert_one(user_data)
-
-            st.write("Form submitted successfully!")
-
-def search_page():
-    st.title("Search Page")
-    
-    # Add a centered image
-    st.image("1.jpg", use_column_width=True)
-
-    # Retrieve all documents from the collection
-    documents = collection.find()
-
-    # Display each document in a card view
-    for document in documents:
-        st.write("---")
-        st.write(f"Type of Brahmin: {document['Type of Brahmin']}")
-        st.write(f"Gotra: {document['Gotra']}")
-        st.write(f"Name: {document['Name']}")
-        st.write(f"Father Name: {document['Father Name']}")
-        st.write(f"Mother Name: {document['Mother Name']}")
-        st.write(f"Sex: {document['Sex']}")
-        st.write(f"Date of Birth: {document['Date of Birth']}")
-        st.write(f"Time of Birth: {document['Time of Birth']}")
-        st.write(f"Place of Birth: {document['Place of Birth']}")
-        st.write(f"Height (Feet): {document['Height (Feet)']}")
-        st.write(f"Height (Meter): {document['Height (Meter)']}")
-        st.write(f"Body Type: {document['Body Type']}")
-        st.write(f"Color: {document['Color']}")
-        st.write(f"Manglik Dosh: {document['Manglik Dosh']}")
-        st.write(f"Education: {document['Education']}")
-        st.write(f"Job/Work/Occupation: {document['Job/Work/Occupation']}")
-        st.write(f"Income: {document['Income']}")
-        st.write(f"Agriculture: {document['Agriculture']}")
-        st.write(f"Other Income Sources: {document['Other Income Sources']}")
-        st.write(f"Diet: {document['Diet']}")
-        st.write(f"Siblings: {document['Siblings']}")
-        st.write(f"Permanent Address: {document['Permanent Address']}")
-        st.write(f"Current Address: {document['Current Address']}")
-        st.write(f"Contact No.: {document['Contact No.']}")
-        st.write(f"Mail: {document['Mail']}")
-        # st.write(f"PostrerName: {document['PostrerName']}")
+st.set_page_config(page_title="Nagar Brahmin Matrimony", page_icon="🧡", layout="centered")
 
 
+def db():
+    if not DB_URL:
+        st.error("Missing DB URL. Set SUPA_POOL_URL in .env (recommended).")
+        st.stop()
+    try:
+        return psycopg.connect(DB_URL)
+    except Exception:
+        st.error(
+            "Database connection failed. Your direct Supabase URL is IPv6-only.\n\n"
+            "Use shared pooler IPv4 URL in `.env`:\n"
+            "`SUPA_POOL_URL=postgresql://postgres.<PROJECT_REF>:<PASSWORD>@<POOLER_HOST>:6543/postgres?sslmode=require`\n\n"
+            "Get this exact string from Supabase Dashboard -> Connect -> Connection pooling."
+        )
+        st.stop()
 
-        st.write(f"Additional Comments: {document['Additional Comments']}")
 
-def main():
-    st.sidebar.title("Navigation")
-    page = st.sidebar.radio("Go to", ["Post", "Search page"])
+def init_db():
+    with db() as conn, conn.cursor() as cur:
+        cur.execute(
+            """
+            create table if not exists nb_users(
+                login text primary key,
+                password text not null,
+                created_at timestamptz default now()
+            );
+            create table if not exists nb_profiles(
+                id bigserial primary key,
+                created_by_login text,
+                full_name text not null,
+                gender text,
+                dob date,
+                gotra text,
+                manglik text,
+                education text,
+                occupation text,
+                city text,
+                about text,
+                contact_phone text,
+                contact_email text,
+                photo_b64 text,
+                created_at timestamptz default now()
+            );
+            create unique index if not exists nb_users_login_uidx on nb_users(login);
+            create index if not exists nb_profiles_city_idx on nb_profiles(city);
+            create index if not exists nb_profiles_gender_idx on nb_profiles(gender);
+            """
+        )
 
-    if page == "Post":
-        post_page()
-    elif page == "Search page":
-        search_page()
 
-# Call the main function to run the Streamlit app
-if __name__ == "__main__":
-    main()
+def sign_up(login, password):
+    with db() as conn, conn.cursor() as cur:
+        cur.execute("insert into nb_users(login,password) values(%s,%s) on conflict (login) do nothing", (login.strip(), password))
+        return cur.rowcount == 1
 
-# Add your credit message at the bottom of the application
+
+def sign_in(login, password):
+    with db() as conn, conn.cursor() as cur:
+        cur.execute("select login from nb_users where login=%s and password=%s", (login.strip(), password))
+        return cur.fetchone()
+
+
+def save_profile(user_login, form, photo):
+    photo_b64 = base64.b64encode(photo.getvalue()).decode() if photo else ""
+    with db() as conn, conn.cursor() as cur:
+        cur.execute(
+            """
+            insert into nb_profiles(created_by_login,full_name,gender,dob,gotra,manglik,education,occupation,city,about,contact_phone,contact_email,photo_b64)
+            values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+            """,
+            (user_login, form["full_name"], form["gender"], form["dob"], form["gotra"], form["manglik"], form["education"], form["occupation"], form["city"], form["about"], form["contact_phone"], form["contact_email"], photo_b64),
+        )
+
+
+def list_profiles(gender, city):
+    q = "select full_name,gender,dob,gotra,manglik,education,occupation,city,about,contact_phone,contact_email,photo_b64,created_at from nb_profiles where 1=1"
+    args = []
+    if gender != "All":
+        q += " and gender=%s"
+        args.append(gender)
+    if city:
+        q += " and city ilike %s"
+        args.append(f"%{city.strip()}%")
+    q += " order by created_at desc"
+    with db() as conn, conn.cursor() as cur:
+        cur.execute(q, args)
+        return cur.fetchall()
+
+
+init_db()
+st.title("Nagar Brahmin Matrimony")
+st.caption("Simple community prototype for families and elders")
+
+if "user" not in st.session_state:
+    st.session_state.user = None
+
+if not st.session_state.user:
+    mode = st.radio("Start", ["Sign In", "Sign Up"], horizontal=True)
+    login = st.text_input("Email or Phone")
+    password = st.text_input("Password", type="password")
+    if st.button(mode):
+        if not login or not password:
+            st.warning("Please fill both fields.")
+        elif mode == "Sign Up":
+            if sign_up(login, password):
+                st.success("Account created. Please sign in.")
+            else:
+                st.error("Account already exists.")
+        else:
+            user = sign_in(login, password)
+            if user:
+                st.session_state.user = {"login": user[0]}
+                st.rerun()
+            else:
+                st.error("Invalid login.")
+    st.stop()
+
+nav = st.radio("Menu", ["Create Profile", "Browse Profiles", "My Account"], horizontal=True)
+
+if nav == "Create Profile":
+    with st.form("profile"):
+        full_name = st.text_input("Full Name")
+        gender = st.selectbox("Gender", ["Male", "Female", "Other"])
+        dob = st.date_input("Date of Birth", value=date(1998, 1, 1), min_value=date(1960, 1, 1), max_value=date.today())
+        gotra = st.text_input("Gotra")
+        manglik = st.selectbox("Manglik", ["No", "Yes", "Not Sure"])
+        education = st.text_input("Education")
+        occupation = st.text_input("Occupation")
+        city = st.text_input("City")
+        contact_phone = st.text_input("Contact Phone")
+        contact_email = st.text_input("Contact Email")
+        about = st.text_area("About / Family Details")
+        photo = st.file_uploader("Photo", type=["jpg", "jpeg", "png"])
+        ok = st.form_submit_button("Save Profile")
+    if ok:
+        if not full_name:
+            st.warning("Full name is required.")
+        else:
+            save_profile(
+                st.session_state.user["login"],
+                {
+                    "full_name": full_name,
+                    "gender": gender,
+                    "dob": dob,
+                    "gotra": gotra,
+                    "manglik": manglik,
+                    "education": education,
+                    "occupation": occupation,
+                    "city": city,
+                    "about": about,
+                    "contact_phone": contact_phone,
+                    "contact_email": contact_email,
+                },
+                photo,
+            )
+            st.success("Profile saved.")
+
+elif nav == "Browse Profiles":
+    c1, c2 = st.columns(2)
+    with c1:
+        g = st.selectbox("Filter Gender", ["All", "Male", "Female", "Other"])
+    with c2:
+        c = st.text_input("Filter City")
+    rows = list_profiles(g, c)
+    st.caption(f"{len(rows)} profile(s)")
+    for r in rows:
+        name, gender, dob, gotra, manglik, edu, occ, city, about, phone, email, photo_b64, created = r
+        age = (date.today() - dob).days // 365 if dob else "-"
+        img = (
+            f"<img src='data:image/jpeg;base64,{photo_b64}' style='width:84px;height:84px;border-radius:12px;object-fit:cover;border:1px solid #ead7bf'/>"
+            if photo_b64
+            else ""
+        )
+        st.markdown(
+            f"""
+            <div class='card'>
+                <div style='display:flex;gap:12px;align-items:center'>{img}<div><h4 style='margin:0'>{name}</h4><small>{gender} | {age} yrs | {city or '-'}</small></div></div>
+                <p style='margin:.6rem 0 0'><b>Gotra:</b> {gotra or '-'} | <b>Manglik:</b> {manglik or '-'}<br><b>Education:</b> {edu or '-'}<br><b>Occupation:</b> {occ or '-'}<br><b>Contact:</b> {phone or '-'} / {email or '-'}<br><b>About:</b> {about or '-'}</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+else:
+    st.write(f"Signed in as: `{st.session_state.user['login']}`")
+    if st.button("Logout"):
+        st.session_state.user = None
+        st.rerun()
+
 st.markdown("---")
-st.write("Developed by Yash Mahesh Rawal 'जय हत्केश'")
+st.caption("Developed by Yash Mahesh Rawal | जय हत्केश")
