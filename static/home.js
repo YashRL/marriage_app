@@ -1,4 +1,6 @@
 const logoutBtn = document.getElementById("logoutBtn");
+const profileMenuBtn = document.getElementById("profileMenuBtn");
+const profileMenu = document.getElementById("profileMenu");
 const saveProfileBtn = document.getElementById("saveProfileBtn");
 const profilePrevBtn = document.getElementById("profilePrevBtn");
 const profileNextBtn = document.getElementById("profileNextBtn");
@@ -12,6 +14,16 @@ const profileStepTabs = Array.from(document.querySelectorAll("[data-step-tab]"))
 const profileStepPanels = Array.from(document.querySelectorAll("[data-step-panel]"));
 
 let currentProfileStep = 0;
+
+function closeProfileMenu() {
+  profileMenu.hidden = true;
+  profileMenuBtn.setAttribute("aria-expanded", "false");
+}
+
+function openProfileMenu() {
+  profileMenu.hidden = false;
+  profileMenuBtn.setAttribute("aria-expanded", "true");
+}
 
 async function api(url, options = {}) {
   const response = await fetch(url, {
@@ -108,6 +120,30 @@ async function loadProfiles() {
 logoutBtn.addEventListener("click", async () => {
   await api("/api/signout", { method: "POST" });
   window.location.href = "/auth";
+});
+
+profileMenuBtn.addEventListener("click", () => {
+  if (profileMenu.hidden) {
+    openProfileMenu();
+    return;
+  }
+  closeProfileMenu();
+});
+
+document.addEventListener("click", (event) => {
+  if (profileMenu.hidden) {
+    return;
+  }
+  if (profileMenu.contains(event.target) || profileMenuBtn.contains(event.target)) {
+    return;
+  }
+  closeProfileMenu();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeProfileMenu();
+  }
 });
 
 saveProfileBtn.addEventListener("click", async () => {

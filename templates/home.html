@@ -12,8 +12,35 @@
       </a>
     </div>
     <div class="home-actions">
-      <span class="user-pill">{{ user }}</span>
-      <button id="logoutBtn" class="secondary-btn" type="button">Logout</button>
+      <div class="profile-menu-wrap">
+        <button id="profileMenuBtn" class="profile-avatar-btn" type="button" aria-expanded="false" aria-haspopup="true">
+          {{ avatar_text }}
+        </button>
+        <div id="profileMenu" class="profile-menu-popup" hidden>
+          <div class="profile-menu-head">
+            <div class="profile-menu-avatar">{{ avatar_text }}</div>
+            <div class="profile-menu-copy">
+              <strong>{{ user_name }}</strong>
+              <span>Signed in user</span>
+            </div>
+          </div>
+          <div class="profile-menu-body">
+            <div class="profile-menu-row">
+              <span>Name</span>
+              <strong>{{ user_name }}</strong>
+            </div>
+            <div class="profile-menu-row">
+              <span>Email</span>
+              <strong>{{ user_email }}</strong>
+            </div>
+            <div class="profile-menu-row">
+              <span>Status</span>
+              <strong>Active session</strong>
+            </div>
+          </div>
+          <button id="logoutBtn" class="secondary-btn profile-menu-logout" type="button">Logout</button>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -21,7 +48,7 @@
     <section class="home-hero">
       <div class="home-hero-copy">
         <div class="home-hero-badge">Personal Dashboard</div>
-        <h1>Welcome, {{ user }}</h1>
+        <h1>Welcome, {{ user_name }}</h1>
         <p>Manage your profile, review matches, and keep your marriage search organized in one clear space.</p>
         <div class="home-hero-tags">
           <span>Profile ready</span>

@@ -6,12 +6,14 @@ const authHeading = document.getElementById("authHeading");
 const authSubtext = document.getElementById("authSubtext");
 const authSubmit = document.getElementById("authSubmit");
 const authMessage = document.getElementById("authMessage");
+const authNameField = document.getElementById("authNameField");
 
 function setAuthMode(mode) {
   authState.mode = mode;
   const isSignin = mode === "signin";
   signinTab.classList.toggle("active", isSignin);
   signupTab.classList.toggle("active", !isSignin);
+  authNameField.hidden = isSignin;
   authHeading.textContent = isSignin ? "Welcome back" : "Create your account";
   authSubtext.textContent = isSignin
     ? "Sign in to continue to your home page."
@@ -47,6 +49,7 @@ signinTab.addEventListener("click", () => setAuthMode("signin"));
 signupTab.addEventListener("click", () => setAuthMode("signup"));
 
 authSubmit.addEventListener("click", async () => {
+  const userName = document.getElementById("authName").value.trim();
   const login = document.getElementById("authLogin").value.trim();
   const password = document.getElementById("authPassword").value;
 
@@ -54,7 +57,7 @@ authSubmit.addEventListener("click", async () => {
     if (authState.mode === "signup") {
       const data = await api("/api/signup", {
         method: "POST",
-        body: JSON.stringify({ login, password }),
+        body: JSON.stringify({ user_name: userName, login, password }),
       });
       setAuthMode("signin");
       showMessage("success", data.message);

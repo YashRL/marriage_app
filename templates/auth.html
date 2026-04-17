@@ -26,8 +26,13 @@
       <p class="auth-subtext" id="authSubtext">Sign in to continue to your home page.</p>
 
       <div class="form-stack">
-        <label for="authLogin">Username</label>
-        <input id="authLogin" type="text" placeholder="Enter your username">
+        <div id="authNameField" hidden>
+          <label for="authName">User Name</label>
+          <input id="authName" type="text" placeholder="Enter your name">
+        </div>
+
+        <label for="authLogin">Email</label>
+        <input id="authLogin" type="email" placeholder="Enter your email">
 
         <label for="authPassword">Password</label>
         <input id="authPassword" type="password" placeholder="Enter your password">

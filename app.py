@@ -34,6 +34,7 @@ def init_db():
             """
             create table if not exists nb_users(
                 login text primary key,
+                user_name text not null default '',
                 password text not null,
                 created_at timestamptz default now()
             );
@@ -59,13 +60,25 @@ def init_db():
             create index if not exists nb_profiles_gender_idx on nb_profiles(gender);
             """
         )
+        cur.execute("alter table nb_users add column if not exists user_name text")
+        cur.execute(
+            """
+            update nb_users
+            set user_name = initcap(split_part(login, '@', 1))
+            where user_name is null or btrim(user_name) = ''
+            """
+        )
 
 
-def sign_up(login, password):
+def sign_up(login, user_name, password):
     with db() as conn, conn.cursor() as cur:
         cur.execute(
-            "insert into nb_users(login,password) values(%s,%s) on conflict (login) do nothing",
-            (login.strip(), password),
+            """
+            insert into nb_users(login,user_name,password)
+            values(%s,%s,%s)
+            on conflict (login) do nothing
+            """,
+            (login.strip(), user_name.strip(), password),
         )
         return cur.rowcount == 1
 
@@ -73,11 +86,31 @@ def sign_up(login, password):
 def sign_in(login, password):
     with db() as conn, conn.cursor() as cur:
         cur.execute(
-            "select login from nb_users where login=%s and password=%s",
+            "select login, user_name from nb_users where login=%s and password=%s",
             (login.strip(), password),
         )
         row = cur.fetchone()
-        return row[0] if row else None
+        if not row:
+            return None
+        return {"login": row[0], "user_name": row[1] or initcap_login(row[0])}
+
+
+def initcap_login(login):
+    return login.split("@", 1)[0].strip().replace(".", " ").replace("_", " ").title()
+
+
+def get_user_by_login(login):
+    if not login:
+        return None
+    with db() as conn, conn.cursor() as cur:
+        cur.execute(
+            "select login, user_name from nb_users where login=%s",
+            (login.strip(),),
+        )
+        row = cur.fetchone()
+    if not row:
+        return None
+    return {"login": row[0], "user_name": row[1] or initcap_login(row[0])}
 
 
 def save_profile(created_by_login, data, photo):
@@ -148,8 +181,17 @@ def list_profiles(gender, city):
     return profiles
 
 
-def current_user(request: Request):
+def current_user_login(request: Request):
     return request.cookies.get(COOKIE_NAME, "").strip()
+
+
+def current_user(request: Request):
+    return get_user_by_login(current_user_login(request))
+
+
+def avatar_text(login):
+    cleaned = (login or "").strip()
+    return (cleaned[:2] or "VJ").upper()
 
 
 @app.on_event("startup")
@@ -168,7 +210,7 @@ def landing_page(request: Request):
 
 @app.get("/auth", response_class=HTMLResponse)
 def auth_page(request: Request):
-    if current_user(request):
+    if current_user_login(request):
         return RedirectResponse("/home", status_code=302)
     return templates.TemplateResponse(
         request=request,
@@ -185,7 +227,12 @@ def home_page(request: Request):
     return templates.TemplateResponse(
         request=request,
         name="home.html",
-        context={"request": request, "user": user},
+        context={
+            "request": request,
+            "user_name": user["user_name"],
+            "user_email": user["login"],
+            "avatar_text": avatar_text(user["login"]),
+        },
     )
 
 
@@ -202,17 +249,22 @@ def favicon():
 @app.get("/api/session")
 def session(request: Request):
     user = current_user(request)
-    return {"logged_in": bool(user), "login": user}
+    return {
+        "logged_in": bool(user),
+        "login": user["login"] if user else "",
+        "user_name": user["user_name"] if user else "",
+    }
 
 
 @app.post("/api/signup")
 async def api_signup(request: Request):
     data = await request.json()
     login = (data.get("login") or "").strip()
+    user_name = (data.get("user_name") or "").strip()
     password = data.get("password") or ""
-    if not login or not password:
-        raise HTTPException(status_code=400, detail="Please fill both fields.")
-    if not sign_up(login, password):
+    if not user_name or not login or not password:
+        raise HTTPException(status_code=400, detail="Please fill all fields.")
+    if not sign_up(login, user_name, password):
         raise HTTPException(status_code=400, detail="Account already exists.")
     return {"message": "Account created. Please sign in."}
 
@@ -225,8 +277,8 @@ async def api_signin(request: Request):
     user = sign_in(login, password)
     if not user:
         raise HTTPException(status_code=401, detail="Invalid login.")
-    response = JSONResponse({"message": "Signed in.", "login": user})
-    response.set_cookie(COOKIE_NAME, user, httponly=True, samesite="lax")
+    response = JSONResponse({"message": "Signed in.", **user})
+    response.set_cookie(COOKIE_NAME, user["login"], httponly=True, samesite="lax")
     return response
 
 
@@ -258,7 +310,7 @@ async def api_create_profile(
     contact_email: str = Form(""),
     photo: UploadFile | None = File(default=None),
 ):
-    user = current_user(request)
+    user = current_user_login(request)
     if not user:
         raise HTTPException(status_code=401, detail="Please sign in first.")
     photo_bytes = await photo.read() if photo and photo.filename else b""
