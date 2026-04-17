@@ -6,8 +6,10 @@
 <div class="site-shell">
   <header class="topbar home-topbar">
     <div>
-      <a class="brand" href="/">Vivah Jyot</a>
-      <p class="topbar-note">Marriage dashboard</p>
+      <a class="brand" href="/">
+        <span class="brand-mark">VJ</span>
+        <span>Vivah Jyot</span>
+      </a>
     </div>
     <div class="home-actions">
       <span class="user-pill">{{ user }}</span>
@@ -17,68 +19,137 @@
 
   <main class="home-main">
     <section class="home-hero">
-      <div>
-        <p class="eyebrow">After login home page</p>
+      <div class="home-hero-copy">
+        <div class="home-hero-badge">Personal Dashboard</div>
         <h1>Welcome, {{ user }}</h1>
-        <p>Manage a profile, browse matches, and keep the experience simple and clear.</p>
+        <p>Manage your profile, review matches, and keep your marriage search organized in one clear space.</p>
+        <div class="home-hero-tags">
+          <span>Profile ready</span>
+          <span>Match browsing</span>
+          <span>Simple workflow</span>
+        </div>
+        <div class="home-hero-metrics">
+          <div class="hero-metric">
+            <strong>01</strong>
+            <span>Create or update your biodata</span>
+          </div>
+          <div class="hero-metric">
+            <strong>02</strong>
+            <span>Filter and review profiles faster</span>
+          </div>
+        </div>
       </div>
-      <img src="/static/images/cosmic-match.svg" alt="Astrology home illustration">
+      <div class="home-hero-visual">
+        <div class="home-hero-glow"></div>
+        <div class="home-hero-card home-hero-card-top">
+          <span>Match View</span>
+          <strong>Focused and easy to scan</strong>
+        </div>
+        <div class="home-hero-image-shell">
+          <img src="/static/images/cosmic-match.svg" alt="Astrology home illustration">
+        </div>
+        <div class="home-hero-card home-hero-card-bottom">
+          <span>Family First</span>
+          <strong>Clean layout with marriage-oriented flow</strong>
+        </div>
+      </div>
     </section>
 
     <section class="dashboard-grid">
-      <article class="panel">
+      <article class="panel profile-stepper-panel">
         <div class="panel-heading">
-          <h2>Create Profile</h2>
+          <h2>Create & Update Profile</h2>
           <p>Add marriage details and contact information.</p>
         </div>
 
-        <div class="form-grid">
-          <label for="fullName">Full Name</label>
-          <input id="fullName" type="text" placeholder="Full name">
-
-          <label for="gender">Gender</label>
-          <select id="gender">
-            <option value="">Select gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-
-          <label for="dob">Date of Birth</label>
-          <input id="dob" type="date">
-
-          <label for="gotra">Gotra</label>
-          <input id="gotra" type="text" placeholder="Gotra">
-
-          <label for="manglik">Manglik</label>
-          <select id="manglik">
-            <option value="">Select option</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-
-          <label for="education">Education</label>
-          <input id="education" type="text" placeholder="Education">
-
-          <label for="occupation">Occupation</label>
-          <input id="occupation" type="text" placeholder="Occupation">
-
-          <label for="city">City</label>
-          <input id="city" type="text" placeholder="City">
-
-          <label for="contactPhone">Phone</label>
-          <input id="contactPhone" type="text" placeholder="Phone number">
-
-          <label for="contactEmail">Email</label>
-          <input id="contactEmail" type="email" placeholder="Email address">
-
-          <label for="about">About</label>
-          <textarea id="about" rows="4" placeholder="Short introduction"></textarea>
-
-          <label for="photo">Photo</label>
-          <input id="photo" type="file" accept="image/*">
+        <div class="profile-form-stepper" aria-label="Create profile steps">
+          <button class="profile-step-tab active" data-step-tab="0" type="button">
+            <span class="profile-step-count">01</span>
+            <span>Basic Details</span>
+          </button>
+          <button class="profile-step-tab" data-step-tab="1" type="button">
+            <span class="profile-step-count">02</span>
+            <span>Background</span>
+          </button>
+          <button class="profile-step-tab" data-step-tab="2" type="button">
+            <span class="profile-step-count">03</span>
+            <span>Contact & Photo</span>
+          </button>
         </div>
 
-        <div class="panel-actions">
+        <div class="profile-step-panels">
+          <section class="profile-step-panel active" data-step-panel="0">
+            <div class="step-copy">
+              <strong>Step 1</strong>
+              <p>Start with the core biodata details for the profile.</p>
+            </div>
+            <div class="form-grid">
+              <label for="fullName">Full Name</label>
+              <input id="fullName" type="text" placeholder="Full name">
+
+              <label for="gender">Gender</label>
+              <select id="gender">
+                <option value="">Select gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+
+              <label for="dob">Date of Birth</label>
+              <input id="dob" type="date">
+
+              <label for="city">City</label>
+              <input id="city" type="text" placeholder="City">
+            </div>
+          </section>
+
+          <section class="profile-step-panel" data-step-panel="1">
+            <div class="step-copy">
+              <strong>Step 2</strong>
+              <p>Add horoscope and background information for a stronger profile.</p>
+            </div>
+            <div class="form-grid">
+              <label for="gotra">Gotra</label>
+              <input id="gotra" type="text" placeholder="Gotra">
+
+              <label for="manglik">Manglik</label>
+              <select id="manglik">
+                <option value="">Select option</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+
+              <label for="education">Education</label>
+              <input id="education" type="text" placeholder="Education">
+
+              <label for="occupation">Occupation</label>
+              <input id="occupation" type="text" placeholder="Occupation">
+
+              <label for="about">About</label>
+              <textarea id="about" rows="4" placeholder="Short introduction"></textarea>
+            </div>
+          </section>
+
+          <section class="profile-step-panel" data-step-panel="2">
+            <div class="step-copy">
+              <strong>Step 3</strong>
+              <p>Finish with contact information and an optional profile photo.</p>
+            </div>
+            <div class="form-grid">
+              <label for="contactPhone">Phone</label>
+              <input id="contactPhone" type="text" placeholder="Phone number">
+
+              <label for="contactEmail">Email</label>
+              <input id="contactEmail" type="email" placeholder="Email address">
+
+              <label for="photo">Photo</label>
+              <input id="photo" type="file" accept="image/*">
+            </div>
+          </section>
+        </div>
+
+        <div class="panel-actions profile-step-actions">
+          <button id="profilePrevBtn" class="secondary-btn" type="button">Previous</button>
+          <button id="profileNextBtn" class="secondary-btn" type="button">Next</button>
           <button id="saveProfileBtn" class="primary-btn" type="button">Save Profile</button>
           <p id="profileMessage" class="status-message" aria-live="polite"></p>
         </div>

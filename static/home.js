@@ -1,11 +1,17 @@
 const logoutBtn = document.getElementById("logoutBtn");
 const saveProfileBtn = document.getElementById("saveProfileBtn");
+const profilePrevBtn = document.getElementById("profilePrevBtn");
+const profileNextBtn = document.getElementById("profileNextBtn");
 const profileMessage = document.getElementById("profileMessage");
 const profilesNode = document.getElementById("profiles");
 const profilesCount = document.getElementById("profilesCount");
 const filterGender = document.getElementById("filterGender");
 const filterCity = document.getElementById("filterCity");
 const loadProfilesBtn = document.getElementById("loadProfilesBtn");
+const profileStepTabs = Array.from(document.querySelectorAll("[data-step-tab]"));
+const profileStepPanels = Array.from(document.querySelectorAll("[data-step-panel]"));
+
+let currentProfileStep = 0;
 
 async function api(url, options = {}) {
   const response = await fetch(url, {
@@ -35,6 +41,22 @@ function ageFromDob(dob) {
 function showProfileMessage(type, text) {
   profileMessage.className = `status-message ${type}`;
   profileMessage.textContent = text;
+}
+
+function setProfileStep(stepIndex) {
+  currentProfileStep = stepIndex;
+
+  profileStepTabs.forEach((tab, index) => {
+    tab.classList.toggle("active", index === stepIndex);
+  });
+
+  profileStepPanels.forEach((panel, index) => {
+    panel.classList.toggle("active", index === stepIndex);
+  });
+
+  profilePrevBtn.style.display = stepIndex === 0 ? "none" : "inline-flex";
+  profileNextBtn.style.display = stepIndex === profileStepPanels.length - 1 ? "none" : "inline-flex";
+  saveProfileBtn.style.display = stepIndex === profileStepPanels.length - 1 ? "inline-flex" : "none";
 }
 
 function renderProfiles(items) {
@@ -116,10 +138,29 @@ saveProfileBtn.addEventListener("click", async () => {
   }
 });
 
+profilePrevBtn.addEventListener("click", () => {
+  if (currentProfileStep > 0) {
+    setProfileStep(currentProfileStep - 1);
+  }
+});
+
+profileNextBtn.addEventListener("click", () => {
+  if (currentProfileStep < profileStepPanels.length - 1) {
+    setProfileStep(currentProfileStep + 1);
+  }
+});
+
+profileStepTabs.forEach((tab, index) => {
+  tab.addEventListener("click", () => {
+    setProfileStep(index);
+  });
+});
+
 loadProfilesBtn.addEventListener("click", loadProfiles);
 filterGender.addEventListener("change", loadProfiles);
 filterCity.addEventListener("input", loadProfiles);
 
+setProfileStep(0);
 loadProfiles().catch(() => {
   renderProfiles([]);
 });
