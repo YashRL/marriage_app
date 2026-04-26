@@ -17,7 +17,7 @@ LANG_COOKIE = "nb_lang"
 
 TRANSLATIONS = {
     "en": {
-        "title": "Nagar Brahmin Matrimony",
+        "title": "नागर ब्राहाम्ण समाज *शाखा-रतलाम*",
         "nav_home": "Home",
         "nav_auth": "Get Started",
         "nav_highlights": "See Highlights",
@@ -115,7 +115,7 @@ TRANSLATIONS = {
         "no_profiles_found": "No profiles found."
     },
     "hi": {
-        "title": "नागर ब्राह्मण वैवाहिक",
+        "title": "नागर ब्राहाम्ण समाज *शाखा-रतलाम*",
         "nav_home": "होम",
         "nav_auth": "शुरू करें",
         "nav_highlights": "खासियतें देखें",
@@ -214,7 +214,7 @@ TRANSLATIONS = {
     }
 }
 
-app = FastAPI(title="Nagar Brahmin Matrimony")
+app = FastAPI(title="नागर ब्राहाम्ण समाज *शाखा-रतलाम*")
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 def get_lang(request: Request):
@@ -398,7 +398,7 @@ def current_user(request: Request):
 
 def avatar_text(login):
     cleaned = (login or "").strip()
-    return (cleaned[:2] or "VJ").upper()
+    return (cleaned[:2] or "NB").upper()
 
 @app.on_event("startup")
 def on_startup():
