@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}Login or Signup{% endblock %}
+{% block title %}{{ t(request, 'auth_title') }}{% endblock %}
 
 {% block content %}
 <div class="page-center">
   <div class="auth-layout">
     <section class="auth-aside">
-      <p class="eyebrow">Welcome</p>
-      <h1>Login or create your matrimony account.</h1>
+      <p class="eyebrow">{{ t(request, 'auth_welcome') }}</p>
+      <h1>{{ t(request, 'auth_h1') }}</h1>
       <p>
-        Continue from the landing page into a simple sign in flow. After login, you will reach your home page and can manage profiles there.
+        {{ t(request, 'auth_p') }}
       </p>
       <div class="auth-art">
         <img src="/static/images/astrology-wheel.svg" alt="Astrology art">
@@ -18,30 +18,30 @@
 
     <section class="auth-card">
       <div class="mode-tabs">
-        <button id="signinTab" class="mode-tab active" type="button">Login</button>
-        <button id="signupTab" class="mode-tab" type="button">Signup</button>
+        <button id="signinTab" class="mode-tab active" type="button">{{ t(request, 'login') }}</button>
+        <button id="signupTab" class="mode-tab" type="button">{{ t(request, 'signup') }}</button>
       </div>
 
-      <h2 id="authHeading">Welcome back</h2>
-      <p class="auth-subtext" id="authSubtext">Sign in to continue to your home page.</p>
+      <h2 id="authHeading">{{ t(request, 'welcome_back') }}</h2>
+      <p class="auth-subtext" id="authSubtext">{{ t(request, 'signin_desc') }}</p>
 
       <div class="form-stack">
         <div id="authNameField" hidden>
-          <label for="authName">User Name</label>
-          <input id="authName" type="text" placeholder="Enter your name">
+          <label for="authName">{{ t(request, 'user_name_label') }}</label>
+          <input id="authName" type="text" placeholder="{{ t(request, 'user_name_placeholder') }}">
         </div>
 
-        <label for="authLogin">Email</label>
-        <input id="authLogin" type="email" placeholder="Enter your email">
+        <label for="authLogin">{{ t(request, 'email_label') }}</label>
+        <input id="authLogin" type="email" placeholder="{{ t(request, 'email_placeholder') }}">
 
-        <label for="authPassword">Password</label>
-        <input id="authPassword" type="password" placeholder="Enter your password">
+        <label for="authPassword">{{ t(request, 'password_label') }}</label>
+        <input id="authPassword" type="password" placeholder="{{ t(request, 'password_placeholder') }}">
 
-        <button id="authSubmit" class="primary-btn" type="button">Login</button>
+        <button id="authSubmit" class="primary-btn" type="button">{{ t(request, 'login') }}</button>
         <p id="authMessage" class="status-message" aria-live="polite"></p>
       </div>
 
-      <a class="back-link" href="/">Back to landing page</a>
+      <a class="back-link" href="/">{{ t(request, 'back_to_landing') }}</a>
     </section>
   </div>
 </div>

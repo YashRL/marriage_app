@@ -1588,3 +1588,40 @@ h3 {
     font-size: 0.95rem;
   }
 }
+
+/* Language Toggle */
+.lang-toggle {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 1000;
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 4px;
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(121, 77, 16, 0.14);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(240, 156, 38, 0.2);
+}
+
+.lang-btn {
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 999px;
+  color: var(--muted);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lang-btn:hover {
+  background: rgba(240, 156, 38, 0.08);
+  color: var(--accent-dark);
+}
+
+.lang-btn.active {
+  background: linear-gradient(135deg, var(--accent) 0%, #ffbf57 100%);
+  color: white;
+  box-shadow: 0 8px 16px rgba(240, 156, 38, 0.24);
+}

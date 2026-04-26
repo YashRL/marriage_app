@@ -73,10 +73,10 @@ function setProfileStep(stepIndex) {
 
 function renderProfiles(items) {
   profilesNode.innerHTML = "";
-  profilesCount.textContent = `${items.length} profile${items.length === 1 ? "" : "s"}`;
+  profilesCount.textContent = `${items.length} ${t("profiles_count")}`;
 
   if (!items.length) {
-    profilesNode.innerHTML = '<div class="profile-card"><div class="meta">No profiles found.</div></div>';
+    profilesNode.innerHTML = `<div class="profile-card"><div class="meta">${t("no_profiles_found")}</div></div>`;
     return;
   }
 
@@ -96,12 +96,12 @@ function renderProfiles(items) {
         </div>
       </div>
       <div class="profile-copy">
-        <strong>Gotra:</strong> ${item.gotra || "-"}<br>
-        <strong>Manglik:</strong> ${item.manglik || "-"}<br>
-        <strong>Education:</strong> ${item.education || "-"}<br>
-        <strong>Occupation:</strong> ${item.occupation || "-"}<br>
-        <strong>Contact:</strong> ${item.contact_phone || "-"} / ${item.contact_email || "-"}<br>
-        <strong>About:</strong> ${item.about || "-"}
+        <strong>${t("gotra")}:</strong> ${item.gotra || "-"}<br>
+        <strong>${t("manglik")}:</strong> ${item.manglik || "-"}<br>
+        <strong>${t("education")}:</strong> ${item.education || "-"}<br>
+        <strong>${t("occupation")}:</strong> ${item.occupation || "-"}<br>
+        <strong>${t("phone")}:</strong> ${item.contact_phone || "-"} / ${item.contact_email || "-"}<br>
+        <strong>${t("about")}:</strong> ${item.about || "-"}
       </div>
     `;
     profilesNode.appendChild(card);

@@ -14,11 +14,9 @@ function setAuthMode(mode) {
   signinTab.classList.toggle("active", isSignin);
   signupTab.classList.toggle("active", !isSignin);
   authNameField.hidden = isSignin;
-  authHeading.textContent = isSignin ? "Welcome back" : "Create your account";
-  authSubtext.textContent = isSignin
-    ? "Sign in to continue to your home page."
-    : "Signup first, then login and continue to your home page.";
-  authSubmit.textContent = isSignin ? "Login" : "Signup";
+  authHeading.textContent = isSignin ? t("welcome_back") : t("auth_h1");
+  authSubtext.textContent = isSignin ? t("signin_desc") : t("signup_desc");
+  authSubmit.textContent = isSignin ? t("login") : t("signup");
   authMessage.textContent = "";
   authMessage.className = "status-message";
 }

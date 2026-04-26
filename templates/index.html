@@ -1,40 +1,40 @@
 {% extends "base.html" %}
 
-{% block title %}Marriage Guidance and Astrology{% endblock %}
+{% block title %}{{ t(request, 'title') }}{% endblock %}
 
 {% block content %}
 <div class="site-shell">
   <header class="topbar">
     <a class="brand" href="/">
       <span class="brand-mark">VJ</span>
-      <span>Vivah Jyot</span>
+      <span>{{ t(request, 'brand_name') }}</span>
     </a>
   </header>
 
   <main>
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">Marriage guidance with astrology harmony</p>
-        <h1>Find meaningful matches in a brighter, more elegant matrimony space.</h1>
+        <p class="eyebrow">{{ t(request, 'hero_eyebrow') }}</p>
+        <h1>{{ t(request, 'hero_h1') }}</h1>
         <p class="hero-text">
-          A simple and clear landing page for families and individuals who want marriage information, trusted introductions, and astrology-inspired compatibility in one proper layout.
+          {{ t(request, 'hero_desc') }}
         </p>
         <div class="hero-actions">
-          <a class="primary-btn" href="/auth">Get Started</a>
-          <a class="secondary-btn" href="#highlights">See Highlights</a>
+          <a class="primary-btn" href="/auth">{{ t(request, 'get_started') }}</a>
+          <a class="secondary-btn" href="#highlights">{{ t(request, 'see_highlights') }}</a>
         </div>
         <div class="hero-stats">
           <div class="stat-card">
-            <strong>3-step flow</strong>
-            <span>Landing, login, home</span>
+            <strong>{{ t(request, 'stat_flow') }}</strong>
+            <span>{{ t(request, 'stat_flow_desc') }}</span>
           </div>
           <div class="stat-card">
-            <strong>Astrology-ready</strong>
-            <span>Visuals and match themes</span>
+            <strong>{{ t(request, 'stat_astro') }}</strong>
+            <span>{{ t(request, 'stat_astro_desc') }}</span>
           </div>
           <div class="stat-card">
-            <strong>Neat layout</strong>
-            <span>Simple to browse and use</span>
+            <strong>{{ t(request, 'stat_layout') }}</strong>
+            <span>{{ t(request, 'stat_layout_desc') }}</span>
           </div>
         </div>
       </div>
@@ -83,47 +83,47 @@
 
     <section class="info-grid" id="about">
       <article class="info-card">
-        <h2>Marriage Information</h2>
-        <p>Keep the process clear with profile details, family values, education, and lifestyle preferences in one simple flow.</p>
+        <h2>{{ t(request, 'info_marriage_h2') }}</h2>
+        <p>{{ t(request, 'info_marriage_p') }}</p>
       </article>
       <article class="info-card">
-        <h2>Astrology Insights</h2>
-        <p>Bring horoscope-friendly presentation into the journey with zodiac-inspired visuals and compatibility themes.</p>
+        <h2>{{ t(request, 'info_astro_h2') }}</h2>
+        <p>{{ t(request, 'info_astro_p') }}</p>
       </article>
       <article class="info-card">
-        <h2>Neat User Flow</h2>
-        <p>Start on the landing page, continue to signup or login, and then manage your home dashboard after sign-in.</p>
+        <h2>{{ t(request, 'info_flow_h2') }}</h2>
+        <p>{{ t(request, 'info_flow_p') }}</p>
       </article>
     </section>
 
     <section class="gallery-section" id="highlights">
       <div class="section-heading">
-        <p class="eyebrow">Visual Highlights</p>
-        <h2>Marriage and astrology in a richer landing page layout</h2>
+        <p class="eyebrow">{{ t(request, 'gallery_eyebrow') }}</p>
+        <h2>{{ t(request, 'gallery_h2') }}</h2>
       </div>
 
       <div class="gallery-grid">
         <article class="gallery-card">
           <img src="/static/images/download%20(1).jpeg" alt="Marriage photography highlight">
           <div class="gallery-copy">
-            <h3>Warm Moments</h3>
-            <p>Real imagery makes the landing page feel softer, more grounded, and more inviting for new users.</p>
+            <h3>{{ t(request, 'gallery_1_h3') }}</h3>
+            <p>{{ t(request, 'gallery_1_p') }}</p>
           </div>
         </article>
 
         <article class="gallery-card">
           <img src="/static/images/download%20(2).jpeg" alt="Wedding portrait detail">
           <div class="gallery-copy">
-            <h3>Beautiful Layout</h3>
-            <p>The new card arrangement gives the landing page more depth while keeping the interface neat and clear.</p>
+            <h3>{{ t(request, 'gallery_2_h3') }}</h3>
+            <p>{{ t(request, 'gallery_2_p') }}</p>
           </div>
         </article>
 
         <article class="gallery-card">
           <img src="/static/images/astrology-wheel.svg" alt="Astrology wheel illustration">
           <div class="gallery-copy">
-            <h3>Astrology Accent</h3>
-            <p>Astrology remains part of the design language, now blended with your orange application theme.</p>
+            <h3>{{ t(request, 'gallery_3_h3') }}</h3>
+            <p>{{ t(request, 'gallery_3_p') }}</p>
           </div>
         </article>
       </div>

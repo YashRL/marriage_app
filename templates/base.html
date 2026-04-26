@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ request.state.lang }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,19 +8,30 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/styles.css">
+  <script>
+    window.LANG = "{{ request.state.lang }}";
+    window.TRANSLATIONS = {{ TRANSLATIONS[request.state.lang] | tojson }};
+    function t(key) {
+      return window.TRANSLATIONS[key] || key;
+    }
+  </script>
 </head>
 <body>
+  <div class="lang-toggle">
+    <a href="/api/lang/hi" class="lang-btn {% if request.state.lang == 'hi' %}active{% endif %}">हिन्दी</a>
+    <a href="/api/lang/en" class="lang-btn {% if request.state.lang == 'en' %}active{% endif %}">EN</a>
+  </div>
   {% block content %}{% endblock %}
   <footer class="site-footer">
     <div class="site-footer-inner">
       <div class="site-footer-brand">
         <span class="brand-mark">VJ</span>
         <div>
-          <strong>Vivah Jyot</strong>
-          <p>जय हाटकेश</p>
+          <strong>{{ t(request, 'brand_name') }}</strong>
+          <p>{{ t(request, 'footer_motto') }}</p>
         </div>
       </div>
-      <p class="site-footer-copy">Simple matrimony experience with marriage guidance and profile discovery.</p>
+      <p class="site-footer-copy">{{ t(request, 'footer_desc') }}</p>
     </div>
   </footer>
 </body>

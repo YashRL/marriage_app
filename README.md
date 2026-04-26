@@ -26,7 +26,10 @@ Then open `http://127.0.0.1:8000`.
 Use this start command on Render:
 
 ```bash
-uvicorn app:app --host 0.0.0.0 --port $PORT
+uvicorn app:app     --host 0.0.0.0 --port $PORT
 ```
 
 The default `uvicorn app:app` binds to `127.0.0.1`, which Render cannot expose publicly.
+
+
+uvicorn app:app --host 0.0.0.0 --port 8080

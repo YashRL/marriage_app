@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}{{ t(request, 'nav_home') }}{% endblock %}
 
 {% block content %}
 <div class="site-shell">
@@ -8,7 +8,7 @@
     <div>
       <a class="brand" href="/">
         <span class="brand-mark">VJ</span>
-        <span>Vivah Jyot</span>
+        <span>{{ t(request, 'brand_name') }}</span>
       </a>
     </div>
     <div class="home-actions">
@@ -21,24 +21,24 @@
             <div class="profile-menu-avatar">{{ avatar_text }}</div>
             <div class="profile-menu-copy">
               <strong>{{ user_name }}</strong>
-              <span>Signed in user</span>
+              <span>{{ t(request, 'signed_in_user') }}</span>
             </div>
           </div>
           <div class="profile-menu-body">
             <div class="profile-menu-row">
-              <span>Name</span>
+              <span>{{ t(request, 'name') }}</span>
               <strong>{{ user_name }}</strong>
             </div>
             <div class="profile-menu-row">
-              <span>Email</span>
+              <span>{{ t(request, 'email') }}</span>
               <strong>{{ user_email }}</strong>
             </div>
             <div class="profile-menu-row">
-              <span>Status</span>
-              <strong>Active session</strong>
+              <span>{{ t(request, 'status') }}</span>
+              <strong>{{ t(request, 'active_session') }}</strong>
             </div>
           </div>
-          <button id="logoutBtn" class="secondary-btn profile-menu-logout" type="button">Logout</button>
+          <button id="logoutBtn" class="secondary-btn profile-menu-logout" type="button">{{ t(request, 'logout') }}</button>
         </div>
       </div>
     </div>
@@ -47,22 +47,22 @@
   <main class="home-main">
     <section class="home-hero">
       <div class="home-hero-copy">
-        <div class="home-hero-badge">Personal Dashboard</div>
-        <h1>Welcome, {{ user_name }}</h1>
-        <p>Manage your profile, review matches, and keep your marriage search organized in one clear space.</p>
+        <div class="home-hero-badge">{{ t(request, 'personal_dashboard') }}</div>
+        <h1>{{ t(request, 'welcome') }}, {{ user_name }}</h1>
+        <p>{{ t(request, 'manage_profile_desc') }}</p>
         <div class="home-hero-tags">
-          <span>Profile ready</span>
-          <span>Match browsing</span>
-          <span>Simple workflow</span>
+          <span>{{ t(request, 'profile_ready') }}</span>
+          <span>{{ t(request, 'match_browsing') }}</span>
+          <span>{{ t(request, 'simple_workflow') }}</span>
         </div>
         <div class="home-hero-metrics">
           <div class="hero-metric">
             <strong>01</strong>
-            <span>Create or update your biodata</span>
+            <span>{{ t(request, 'metric_1_h') }}</span>
           </div>
           <div class="hero-metric">
             <strong>02</strong>
-            <span>Filter and review profiles faster</span>
+            <span>{{ t(request, 'metric_2_h') }}</span>
           </div>
         </div>
       </div>
@@ -85,22 +85,22 @@
     <section class="dashboard-grid">
       <article class="panel profile-stepper-panel">
         <div class="panel-heading">
-          <h2>Create & Update Profile</h2>
-          <p>Add marriage details and contact information.</p>
+          <h2>{{ t(request, 'panel_create_h2') }}</h2>
+          <p>{{ t(request, 'panel_create_p') }}</p>
         </div>
 
         <div class="profile-form-stepper" aria-label="Create profile steps">
           <button class="profile-step-tab active" data-step-tab="0" type="button">
             <span class="profile-step-count">01</span>
-            <span>Basic Details</span>
+            <span>{{ t(request, 'step_1') }}</span>
           </button>
           <button class="profile-step-tab" data-step-tab="1" type="button">
             <span class="profile-step-count">02</span>
-            <span>Background</span>
+            <span>{{ t(request, 'step_2') }}</span>
           </button>
           <button class="profile-step-tab" data-step-tab="2" type="button">
             <span class="profile-step-count">03</span>
-            <span>Contact & Photo</span>
+            <span>{{ t(request, 'step_3') }}</span>
           </button>
         </div>
 
@@ -111,21 +111,21 @@
               <p>Start with the core biodata details for the profile.</p>
             </div>
             <div class="form-grid">
-              <label for="fullName">Full Name</label>
-              <input id="fullName" type="text" placeholder="Full name">
+              <label for="fullName">{{ t(request, 'full_name') }}</label>
+              <input id="fullName" type="text" placeholder="{{ t(request, 'full_name') }}">
 
-              <label for="gender">Gender</label>
+              <label for="gender">{{ t(request, 'gender') }}</label>
               <select id="gender">
-                <option value="">Select gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
+                <option value="">{{ t(request, 'select_gender') }}</option>
+                <option value="Male">{{ t(request, 'male') }}</option>
+                <option value="Female">{{ t(request, 'female') }}</option>
               </select>
 
-              <label for="dob">Date of Birth</label>
+              <label for="dob">{{ t(request, 'dob') }}</label>
               <input id="dob" type="date">
 
-              <label for="city">City</label>
-              <input id="city" type="text" placeholder="City">
+              <label for="city">{{ t(request, 'city') }}</label>
+              <input id="city" type="text" placeholder="{{ t(request, 'city') }}">
             </div>
           </section>
 
@@ -135,24 +135,24 @@
               <p>Add horoscope and background information for a stronger profile.</p>
             </div>
             <div class="form-grid">
-              <label for="gotra">Gotra</label>
-              <input id="gotra" type="text" placeholder="Gotra">
+              <label for="gotra">{{ t(request, 'gotra') }}</label>
+              <input id="gotra" type="text" placeholder="{{ t(request, 'gotra') }}">
 
-              <label for="manglik">Manglik</label>
+              <label for="manglik">{{ t(request, 'manglik') }}</label>
               <select id="manglik">
-                <option value="">Select option</option>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
+                <option value="">{{ t(request, 'select_option') }}</option>
+                <option value="Yes">{{ t(request, 'yes') }}</option>
+                <option value="No">{{ t(request, 'no') }}</option>
               </select>
 
-              <label for="education">Education</label>
-              <input id="education" type="text" placeholder="Education">
+              <label for="education">{{ t(request, 'education') }}</label>
+              <input id="education" type="text" placeholder="{{ t(request, 'education') }}">
 
-              <label for="occupation">Occupation</label>
-              <input id="occupation" type="text" placeholder="Occupation">
+              <label for="occupation">{{ t(request, 'occupation') }}</label>
+              <input id="occupation" type="text" placeholder="{{ t(request, 'occupation') }}">
 
-              <label for="about">About</label>
-              <textarea id="about" rows="4" placeholder="Short introduction"></textarea>
+              <label for="about">{{ t(request, 'about') }}</label>
+              <textarea id="about" rows="4" placeholder="{{ t(request, 'about') }}"></textarea>
             </div>
           </section>
 
@@ -162,51 +162,51 @@
               <p>Finish with contact information and an optional profile photo.</p>
             </div>
             <div class="form-grid">
-              <label for="contactPhone">Phone</label>
-              <input id="contactPhone" type="text" placeholder="Phone number">
+              <label for="contactPhone">{{ t(request, 'phone') }}</label>
+              <input id="contactPhone" type="text" placeholder="{{ t(request, 'phone') }}">
 
-              <label for="contactEmail">Email</label>
-              <input id="contactEmail" type="email" placeholder="Email address">
+              <label for="contactEmail">{{ t(request, 'email') }}</label>
+              <input id="contactEmail" type="email" placeholder="{{ t(request, 'email') }}">
 
-              <label for="photo">Photo</label>
+              <label for="photo">{{ t(request, 'photo') }}</label>
               <input id="photo" type="file" accept="image/*">
             </div>
           </section>
         </div>
 
         <div class="panel-actions profile-step-actions">
-          <button id="profilePrevBtn" class="secondary-btn" type="button">Previous</button>
-          <button id="profileNextBtn" class="secondary-btn" type="button">Next</button>
-          <button id="saveProfileBtn" class="primary-btn" type="button">Save Profile</button>
+          <button id="profilePrevBtn" class="secondary-btn" type="button">{{ t(request, 'prev') }}</button>
+          <button id="profileNextBtn" class="secondary-btn" type="button">{{ t(request, 'next') }}</button>
+          <button id="saveProfileBtn" class="primary-btn" type="button">{{ t(request, 'save_profile') }}</button>
           <p id="profileMessage" class="status-message" aria-live="polite"></p>
         </div>
       </article>
 
       <article class="panel">
         <div class="panel-heading">
-          <h2>Browse Profiles</h2>
-          <p>Filter by city and gender.</p>
+          <h2>{{ t(request, 'browse_profiles_h2') }}</h2>
+          <p>{{ t(request, 'browse_profiles_p') }}</p>
         </div>
 
         <div class="filters">
           <div>
-            <label for="filterGender">Gender</label>
+            <label for="filterGender">{{ t(request, 'filter_gender') }}</label>
             <select id="filterGender">
-              <option value="All">All</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
+              <option value="All">{{ t(request, 'all') }}</option>
+              <option value="Male">{{ t(request, 'male') }}</option>
+              <option value="Female">{{ t(request, 'female') }}</option>
             </select>
           </div>
           <div>
-            <label for="filterCity">City</label>
-            <input id="filterCity" type="text" placeholder="Search city">
+            <label for="filterCity">{{ t(request, 'filter_city') }}</label>
+            <input id="filterCity" type="text" placeholder="{{ t(request, 'filter_city') }}">
           </div>
-          <button id="loadProfilesBtn" class="secondary-btn" type="button">Refresh</button>
+          <button id="loadProfilesBtn" class="secondary-btn" type="button">{{ t(request, 'refresh') }}</button>
         </div>
 
         <div class="results-heading">
-          <h3>Available profiles</h3>
-          <span id="profilesCount">0 profiles</span>
+          <h3>{{ t(request, 'available_profiles') }}</h3>
+          <span id="profilesCount">0 {{ t(request, 'profiles_count') }}</span>
         </div>
 
         <div id="profiles" class="profiles-list"></div>
