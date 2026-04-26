@@ -96,12 +96,18 @@ function renderProfiles(items) {
         </div>
       </div>
       <div class="profile-copy">
-        <strong>${t("gotra")}:</strong> ${item.gotra || "-"}<br>
-        <strong>${t("manglik")}:</strong> ${item.manglik || "-"}<br>
-        <strong>${t("education")}:</strong> ${item.education || "-"}<br>
-        <strong>${t("occupation")}:</strong> ${item.occupation || "-"}<br>
-        <strong>${t("phone")}:</strong> ${item.contact_phone || "-"} / ${item.contact_email || "-"}<br>
-        <strong>${t("about")}:</strong> ${item.about || "-"}
+        <p><strong>${t("caste")}:</strong> ${item.caste || "-"} | <strong>${t("gotra")}:</strong> ${item.gotra || "-"}</p>
+        <p><strong>${t("dob")}:</strong> ${item.dob || "-"} | <strong>${t("birth_time")}:</strong> ${item.birth_time || "-"} | <strong>${t("birth_place")}:</strong> ${item.birth_place || "-"}</p>
+        <p><strong>${t("height")}:</strong> ${item.height || "-"} | <strong>${t("blood_group")}:</strong> ${item.blood_group || "-"}</p>
+        <p><strong>${t("manglik")}:</strong> ${item.manglik || "-"}</p>
+        <p><strong>${t("education")}:</strong> ${item.education || "-"}</p>
+        <p><strong>${t("occupation")}:</strong> ${item.occupation || "-"} | <strong>${t("income")}:</strong> ${item.income || "-"}</p>
+        <p><strong>${t("father_name")}:</strong> ${item.father_name || "-"} (${item.father_occupation || "-"})</p>
+        <p><strong>${t("mother_name")}:</strong> ${item.mother_name || "-"} | <strong>${t("siblings")}:</strong> ${item.siblings || "-"}</p>
+        <p><strong>${t("address")}:</strong> ${item.address || "-"}</p>
+        <p><strong>${t("phone")}:</strong> ${item.contact_phone || "-"} | <strong>${t("parents_contact")}:</strong> ${item.parents_contact || "-"}</p>
+        <p><strong>${t("email")}:</strong> ${item.contact_email || "-"}</p>
+        <p><strong>${t("about")}:</strong> ${item.about || "-"}</p>
       </div>
     `;
     profilesNode.appendChild(card);
@@ -151,13 +157,25 @@ saveProfileBtn.addEventListener("click", async () => {
   form.append("full_name", document.getElementById("fullName").value.trim());
   form.append("gender", document.getElementById("gender").value);
   form.append("dob", document.getElementById("dob").value);
+  form.append("birth_time", document.getElementById("birthTime").value);
+  form.append("birth_place", document.getElementById("birthPlace").value.trim());
+  form.append("height", document.getElementById("height").value.trim());
+  form.append("blood_group", document.getElementById("bloodGroup").value.trim());
+  form.append("caste", document.getElementById("caste").value.trim());
+  form.append("income", document.getElementById("income").value.trim());
+  form.append("father_name", document.getElementById("fatherName").value.trim());
+  form.append("father_occupation", document.getElementById("fatherOccupation").value.trim());
+  form.append("mother_name", document.getElementById("motherName").value.trim());
+  form.append("siblings", document.getElementById("siblings").value.trim());
   form.append("gotra", document.getElementById("gotra").value.trim());
   form.append("manglik", document.getElementById("manglik").value);
   form.append("education", document.getElementById("education").value.trim());
   form.append("occupation", document.getElementById("occupation").value.trim());
   form.append("city", document.getElementById("city").value.trim());
+  form.append("address", document.getElementById("address").value.trim());
   form.append("about", document.getElementById("about").value.trim());
   form.append("contact_phone", document.getElementById("contactPhone").value.trim());
+  form.append("parents_contact", document.getElementById("parentsContact").value.trim());
   form.append("contact_email", document.getElementById("contactEmail").value.trim());
 
   const file = document.getElementById("photo").files[0];

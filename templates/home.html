@@ -8,7 +8,7 @@
     <div>
       <a class="brand" href="/">
         <img src="/static/images/nagar_brahmin_logo.jpg" alt="Logo" class="brand-logo">
-        <span>{{ t(request, 'नागर ब्राहाम्ण समाज शाखा-रतलाम') }}</span>
+        <span>{{ 'नागर ब्राहाम्ण समाज शाखा-रतलाम(म.प्र.)'}}</span>
       </a>
     </div>
     <div class="home-actions">
@@ -124,17 +124,44 @@
               <label for="dob">{{ t(request, 'dob') }}</label>
               <input id="dob" type="date">
 
-              <label for="city">{{ t(request, 'city') }}</label>
-              <input id="city" type="text" placeholder="{{ t(request, 'city') }}">
+              <label for="birthTime">{{ t(request, 'birth_time') }}</label>
+              <input id="birthTime" type="time">
+
+              <label for="birthPlace">{{ t(request, 'birth_place') }}</label>
+              <input id="birthPlace" type="text" placeholder="{{ t(request, 'birth_place') }}">
+
+              <label for="height">{{ t(request, 'height') }}</label>
+              <input id="height" type="text" placeholder="{{ t(request, 'height') }}">
+
+              <label for="bloodGroup">{{ t(request, 'blood_group') }}</label>
+              <input id="bloodGroup" type="text" placeholder="{{ t(request, 'blood_group') }}">
+
+              <label for="caste">{{ t(request, 'caste') }}</label>
+              <input id="caste" type="text" placeholder="{{ t(request, 'caste') }}">
+
+              <label for="income">{{ t(request, 'income') }}</label>
+              <input id="income" type="text" placeholder="{{ t(request, 'income') }}">
             </div>
           </section>
 
           <section class="profile-step-panel" data-step-panel="1">
             <div class="step-copy">
               <strong>Step 2</strong>
-              <p>Add horoscope and background information for a stronger profile.</p>
+              <p>Add family background and personal information.</p>
             </div>
             <div class="form-grid">
+              <label for="fatherName">{{ t(request, 'father_name') }}</label>
+              <input id="fatherName" type="text" placeholder="{{ t(request, 'father_name') }}">
+
+              <label for="fatherOccupation">{{ t(request, 'father_occupation') }}</label>
+              <input id="fatherOccupation" type="text" placeholder="{{ t(request, 'father_occupation') }}">
+
+              <label for="motherName">{{ t(request, 'mother_name') }}</label>
+              <input id="motherName" type="text" placeholder="{{ t(request, 'mother_name') }}">
+
+              <label for="siblings">{{ t(request, 'siblings') }}</label>
+              <input id="siblings" type="text" placeholder="{{ t(request, 'siblings') }}">
+
               <label for="gotra">{{ t(request, 'gotra') }}</label>
               <input id="gotra" type="text" placeholder="{{ t(request, 'gotra') }}">
 
@@ -150,9 +177,6 @@
 
               <label for="occupation">{{ t(request, 'occupation') }}</label>
               <input id="occupation" type="text" placeholder="{{ t(request, 'occupation') }}">
-
-              <label for="about">{{ t(request, 'about') }}</label>
-              <textarea id="about" rows="4" placeholder="{{ t(request, 'about') }}"></textarea>
             </div>
           </section>
 
@@ -162,11 +186,23 @@
               <p>Finish with contact information and an optional profile photo.</p>
             </div>
             <div class="form-grid">
+              <label for="city">{{ t(request, 'city') }}</label>
+              <input id="city" type="text" placeholder="{{ t(request, 'city') }}">
+
+              <label for="address">{{ t(request, 'address') }}</label>
+              <input id="address" type="text" placeholder="{{ t(request, 'address') }}">
+
               <label for="contactPhone">{{ t(request, 'phone') }}</label>
               <input id="contactPhone" type="text" placeholder="{{ t(request, 'phone') }}">
 
+              <label for="parentsContact">{{ t(request, 'parents_contact') }}</label>
+              <input id="parentsContact" type="text" placeholder="{{ t(request, 'parents_contact') }}">
+
               <label for="contactEmail">{{ t(request, 'email') }}</label>
               <input id="contactEmail" type="email" placeholder="{{ t(request, 'email') }}">
+
+              <label for="about">{{ t(request, 'about') }}</label>
+              <textarea id="about" rows="3" placeholder="{{ t(request, 'about') }}"></textarea>
 
               <label for="photo">{{ t(request, 'photo') }}</label>
               <input id="photo" type="file" accept="image/*">
